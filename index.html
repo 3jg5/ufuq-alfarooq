@@ -1,0 +1,2145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أُفُق الفاروق | مدرسة الفاروق للتعليم الأساسي (10-12)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root { --c: #114a31; }
+        body.theme-pink { --c: #c2a077; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { color: #1a2f3a; overflow-x: hidden; transition: 0.4s; background: #eef2f5; }
+        
+        .bg-image {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('Gemini_Generated_Im1age_xvbzbzxvbzbzxvbz.jpg');
+            background-size: cover; background-position: center;
+            filter: blur(6px); z-index: -1;
+        }
+
+        .glass-box { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 16px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); }
+
+        .page-view { display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 30px 20px 80px 20px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        #welcome-screen, #auth-screen { padding-top: 10vh; }
+        .hero-logo { height: 110px; margin-bottom: 10px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+        .main-title { font-size: 2.8rem; color: var(--c); font-weight: 900; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(255,255,255,0.8); }
+        
+        .onboarding-card { padding: 30px; max-width: 600px; width: 100%; margin-top: 15px; }
+        .onboarding-title { color: var(--c); margin-bottom: 20px; font-size: 1.4rem; text-align: center; font-weight: bold; }
+        
+        .back-btn { background: rgba(255,255,255,0.9); border: 2px solid var(--c); color: var(--c); font-weight: bold; font-size: 1rem; cursor: pointer; padding: 8px 20px; border-radius: 12px; display: inline-flex; align-items: center; gap: 6px; transition: 0.3s; margin-bottom: 20px; align-self: flex-start; }
+        .back-btn:hover { background: var(--c); color: white; }
+        
+        .grades-grid, .gender-selection, .pathway-selection { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 15px; }
+        .step-btn { background: rgba(255,255,255,0.9); border: 2px solid var(--c); color: var(--c); padding: 10px 20px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1.1rem; }
+        .step-btn:hover, .step-btn.selected-subject { background: var(--c); color: white; transform: translateY(-2px); }
+        
+        .subjects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 15px; max-height: 250px; overflow-y: auto; padding-right: 5px; }
+        .subject-btn { font-size: 0.95rem; padding: 8px; border-radius: 8px; }
+
+        .custom-input { width: 100%; padding: 12px 15px; border-radius: 10px; border: 2px solid rgba(0,0,0,0.1); font-size: 1rem; margin-bottom: 10px; text-align: right; background: #fff; outline: none; transition: 0.3s; }
+        .custom-input:focus { border-color: var(--c); }
+        
+        .btn-main { background: var(--c); color: white; padding: 12px 25px; border-radius: 10px; font-weight: bold; border: none; cursor: pointer; font-size: 1.1rem; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+        .btn-main:disabled { background: #999; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        button:active, .section-card:active, .item-row:active, .word-card:active, .skill-card:active, .major-card:active, .study-card:active, .category-card:active {
+            transform: scale(0.96) !important; transition: transform 0.05s ease-in-out !important;
+        }
+
+        .glass-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 30px; width: 100%; background: rgba(255,255,255,0.85); backdrop-filter: blur(15px); position: fixed; top: 0; left: 0; right: 0; z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.6); box-shadow: 0 2px 15px rgba(0,0,0,0.05); }
+        .header-right { display: flex; align-items: center; gap: 12px; }
+        .navbar-logo { height: 40px; border-radius: 50%; }
+        .user-greeting { font-size: 1.1rem; font-weight: bold; color: var(--c); display: flex; align-items: center; gap: 10px; }
+        
+        .logout-btn { background: #dc3545; color: white; border: none; padding: 8px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 0.95rem; }
+
+        .sections-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; direction: rtl; }
+        @media(max-width: 768px) { .sections-grid { grid-template-columns: 1fr; } }
+
+        .section-card { background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 16px; padding: 25px 30px; cursor: pointer; transition: all 0.3s ease; text-decoration: none; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05); display: flex; align-items: center; gap: 25px; }
+        .section-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.9); border-color: var(--c); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .section-icon { font-size: 3.5rem; line-height: 1; }
+        
+        .section-text-container { display: flex; flex-direction: column; align-items: flex-start; text-align: right; }
+        .section-title { font-size: 1.5rem; font-weight: 900; color: var(--c); line-height: 1.2; }
+        .section-desc { font-size: 1rem; color: #555; margin-top: 5px; font-weight: 600; }
+
+        .side-goals-dropdown { position: fixed; right: 20px; top: 35vh; width: 250px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 16px; padding: 15px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); max-height: 60px; overflow: hidden; transition: max-height 0.5s ease, background 0.4s; z-index: 100; cursor: pointer; }
+        .side-goals-dropdown.expanded { max-height: 400px; background: rgba(255, 255, 255, 0.95); }
+        .side-goals-title { color: var(--c); font-size: 1.1rem; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .side-goals-list { list-style: none; padding: 0; margin: 15px 0 0 0; text-align: right; }
+        .side-goals-list li { padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05); color: #333; font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+        .side-goals-list li:last-child { border-bottom: none; }
+        @media(max-width: 1300px) { .side-goals-dropdown { display: none; } }
+
+        /* نوافذ التنبيهات المخصصة */
+        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 2000; display: none; align-items: center; justify-content: center; }
+        .custom-modal-overlay.active { display: flex; animation: fadeIn 0.3s; }
+        .custom-modal { background: #fff; border-radius: 20px; width: 90%; max-width: 400px; padding: 30px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.2); position: relative; }
+        .custom-modal h3 { color: var(--c); margin-bottom: 15px; font-size: 1.5rem; }
+        .custom-modal p { color: #555; line-height: 1.6; margin-bottom: 20px; font-size: 1.05rem; font-weight: bold; }
+        .modal-close-btn { position: absolute; top: 15px; left: 15px; background: #ffeeee; color: #dc3545; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .modal-close-btn:hover { background: #ffcccc; transform: scale(1.1); }
+
+        .module-view { display: none; padding-top: 100px; max-width: 1200px; width: 100%; margin: 0 auto; padding-bottom: 80px; }
+        .module-view.active { display: flex; flex-direction: column; animation: fadeIn 0.4s; }
+        
+        .big-glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); text-align: right; margin-bottom: 25px; width: 100%; }
+        .big-glass-card h3 { color: var(--c); font-size: 1.5rem; margin-bottom: 20px; border-bottom: 2px solid rgba(17,74,49,0.1); padding-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        
+        .grid-2-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; width: 100%; }
+        @media(max-width: 768px) { .grid-2-cols { grid-template-columns: 1fr; } }
+
+        .item-row { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .item-row.done { background: #f0f0f0; opacity: 0.7; }
+        .item-row.done .task-title { text-decoration: line-through; color: #888; }
+        .badge { background: var(--c); color: white; padding: 4px 12px; border-radius: 15px; font-size: 0.9rem; font-weight: bold; }
+        
+        .major-card { background: rgba(255,255,255,0.9); border-right: 6px solid var(--c); padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; overflow: hidden; }
+        .major-card:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .major-card-header { display: flex; justify-content: space-between; align-items: center; }
+        .major-card-header h4 { color: var(--c); font-size: 1.4rem; font-weight: 900; margin: 0; }
+        .dropdown-icon { font-size: 1.2rem; color: var(--c); transition: transform 0.4s ease; }
+        .major-card.expanded .dropdown-icon { transform: rotate(180deg); }
+        .major-details-container { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.4s ease-in-out; margin-top: 0; }
+        .major-card.expanded .major-details-container { max-height: 2000px; opacity: 1; margin-top: 20px; border-top: 1px dashed rgba(0,0,0,0.1); padding-top: 20px; }
+        
+        .skill-card { background: #fff; border: 1px solid #eee; border-right: 5px solid var(--c); padding: 20px; border-radius: 12px; margin-bottom: 15px; transition: 0.3s; }
+        .skill-card h4 { color: var(--c); font-size: 1.2rem; margin-bottom: 10px; }
+
+        .word-card { background: #fff; border: 2px solid rgba(0,0,0,0.05); padding: 15px; border-radius: 15px; text-align: center; transition: 0.3s; display: flex; flex-direction: column; gap: 8px; }
+        .word-card.done { background: #eaf8ef; border-color: #28a745; }
+        .word-eng { font-size: 1.8rem; font-weight: 900; color: var(--c); direction: ltr; }
+        .word-ar { font-size: 1.2rem; font-weight: bold; color: #444; }
+
+        /* ستايل أقسام الملخصات الجديد (بطاقات زجاجية بالمنتصف) */
+        .category-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 20px; padding: 25px 30px; margin: 15px auto; width: 100%; max-width: 600px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .category-card:hover { transform: translateY(-5px) scale(1.02); background: rgba(255, 255, 255, 0.95); border-color: var(--c); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
+        .category-icon { font-size: 3rem; background: rgba(17,74,49,0.05); width: 80px; height: 80px; display: flex; justify-content: center; align-items: center; border-radius: 20px; flex-shrink: 0; }
+        .category-info { flex: 1; text-align: right; }
+        .category-info h3 { color: var(--c); font-size: 1.5rem; margin-bottom: 5px; font-weight: 900; }
+        .category-info p { color: #666; font-weight: bold; font-size: 1rem; margin: 0; }
+        .category-arrow { font-size: 1.8rem; color: var(--c); background: rgba(17,74,49,0.1); width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; border-radius: 50%; transition: 0.3s; }
+        .category-card:hover .category-arrow { background: var(--c); color: #fff; transform: translateX(-5px); }
+
+        /* ستايل أزرار الملفات الجديد (الأنيق والمنظم) */
+        .file-card { display: flex; align-items: center; background: rgba(255,255,255,0.9); padding: 15px 20px; border-radius: 15px; margin: 0 auto 12px auto; width: 100%; max-width: 800px; border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .file-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); border-color: var(--c); background: #fff; }
+        .file-icon { background: rgba(23,162,184,0.1); color: #17a2b8; width: 45px; height: 45px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; margin-left: 15px; flex-shrink: 0; }
+        .file-title { flex: 1; text-align: right; color: #222; margin: 0; font-size: 0.95rem; font-weight: 700; line-height: 1.6; padding-left:15px; }
+        .file-btn { background: rgba(17,74,49,0.1); color: var(--c); font-size: 0.9rem; font-weight: 800; padding: 8px 20px; border-radius: 10px; white-space: nowrap; flex-shrink: 0; transition: 0.3s; display:flex; align-items:center; gap:5px; border:none; cursor:pointer;}
+        .file-card:hover .file-btn { background: var(--c); color: #fff; }
+        
+        body.theme-pink .category-card:hover { border-color: #c2a077; }
+        body.theme-pink .category-icon { background: rgba(194,160,119,0.05); }
+        body.theme-pink .category-info h3, body.theme-pink .category-arrow { color: #c2a077; }
+        body.theme-pink .category-arrow { background: rgba(194,160,119,0.1); }
+        body.theme-pink .category-card:hover .category-arrow { background: #c2a077; color: #fff; }
+        body.theme-pink .file-card:hover { border-color: #c2a077; }
+        body.theme-pink .file-btn { background: rgba(194,160,119,0.1); color: #c2a077; }
+        body.theme-pink .file-card:hover .file-btn { background: #c2a077; color: #fff; }
+
+        #bot { position: fixed; left: 20px; bottom: 20px; width: 65px; height: 65px; border-radius: 50%; border: 0; background: var(--c); color: #fff; font-size: 2rem; cursor: pointer; z-index: 400; box-shadow: 0 5px 20px rgba(0,0,0,0.3); transition: 0.3s; }
+        #bp { position: fixed; left: 20px; bottom: 95px; width: min(380px, 90vw); height: 500px; z-index: 400; display: none; flex-direction: column; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.2); overflow: hidden; border: 1px solid rgba(0,0,0,0.1); }
+        #bp.on { display: flex; animation: fadeIn 0.3s; }
+
+        .toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(255, 255, 255, 0.95); border-bottom: 4px solid #f1c40f; border-radius: 15px; padding: 15px 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); font-weight: bold; text-align: center; color: var(--c); }
+        
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* شاشة التحميل (Loader) */
+        #global-loader { position: fixed; top:0; left:0; width:100%; height:100%; background:var(--c); z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; transition: 0.5s; }
+        .spinner { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s infinite linear; margin-bottom: 15px; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="bg-image"></div>
+
+    <!-- شاشة التحميل الأولية -->
+    <div id="global-loader">
+        <div class="spinner"></div>
+        <h2 style="font-family: 'Cairo', sans-serif;">جاري تجهيز المنصة...</h2>
+    </div>
+
+    <!-- النوافذ المخصصة للتنبيهات -->
+    <div class="custom-modal-overlay" id="alert-modal">
+        <div class="custom-modal">
+            <button class="modal-close-btn" onclick="closeModal('alert-modal')">✖</button>
+            <h3 id="alert-title">تنبيه ⚠️</h3>
+            <p id="alert-message"></p>
+            <button class="btn-main" style="width: 100%; margin-top: 10px;" onclick="closeModal('alert-modal')">حسناً</button>
+        </div>
+    </div>
+
+    <div class="custom-modal-overlay" id="xp-modal">
+        <div class="custom-modal">
+            <button class="modal-close-btn" onclick="closeModal('xp-modal')">✖</button>
+            <h3>كيف تجمع النقاط وترفع مستواك؟ 🏆</h3>
+            <p style="text-align: right;">
+                📚 إكمال مهمة أو واجب: <b>+10 XP</b><br><br>
+                📝 إنهاء اختبار قصير: <b>+15 XP</b><br><br>
+                📅 الالتزام بخطة الأسبوع: <b>+50 XP</b><br><br>
+                🎯 تحقيق هدفك الأسبوعي: <b>+100 XP</b><br><br>
+            </p>
+            <div style="background: rgba(17,74,49,0.1); padding: 10px; border-radius: 10px; font-weight: bold; color: var(--c);">كل 100 نقطة تنقلك لمستوى جديد أعلى! 🌟</div>
+            <button class="btn-main" style="width: 100%; margin-top: 15px;" onclick="closeModal('xp-modal')">فهمت، انطلق!</button>
+        </div>
+    </div>
+
+    <div class="custom-modal-overlay" id="goal-modal">
+        <div class="custom-modal">
+            <button class="modal-close-btn" onclick="closeModal('goal-modal')">✖</button>
+            <h3>تحديد هدف الأسبوع 🎯</h3>
+            <p>اكتب هدفك الذي تسعى لتحقيقه هذا الأسبوع لتبقى متحمساً:</p>
+            <input type="text" id="goal-input" class="custom-input" style="text-align: center;" placeholder="اكتب هدفك هنا...">
+            <button class="btn-main" style="width: 100%; margin-top: 10px;" onclick="saveWeeklyGoal()">حفظ الهدف</button>
+        </div>
+    </div>
+
+    <!-- شاشة تسجيل الدخول -->
+    <div id="auth-screen" class="page-view fade-in hidden">
+        <img src="Gemini_Generated_Image_tedhl1tedhl1tedh.jfif" alt="شعار مدرسة الفاروق" class="hero-logo">
+        <h1 class="main-title">أُفُق الفاروق</h1>
+        <h2 style="font-size: 1.2rem; margin-bottom: 20px; font-weight: bold; color: #1a2f3a;">مدرسة الفاروق للتعليم الأساسي (10-12)</h2>
+        
+        <div class="glass-box" style="padding: 30px; width: 100%; max-width: 400px; text-align: center;">
+            <h3 style="color: var(--c); margin-bottom: 20px; font-size: 1.4rem;">تسجيل الدخول</h3>
+            <input type="email" id="auth-email" class="custom-input" placeholder="البريد الإلكتروني" style="text-align: right;">
+            <input type="password" id="auth-pass" class="custom-input" placeholder="كلمة المرور" style="text-align: right;">
+            
+            <button id="btn-login" class="btn-main" style="width: 100%; margin-bottom: 10px;">دخول بالبريد</button>
+            <button id="btn-signup" class="btn-main" style="width: 100%; margin-bottom: 15px; background: #17a2b8;">إنشاء حساب جديد</button>
+            
+            <div style="display: flex; align-items: center; margin: 15px 0;">
+                <hr style="flex: 1; border: none; border-top: 1px solid rgba(0,0,0,0.1);">
+                <span style="padding: 0 10px; color: #888; font-size: 0.9rem;">أو</span>
+                <hr style="flex: 1; border: none; border-top: 1px solid rgba(0,0,0,0.1);">
+            </div>
+            
+            <button id="btn-google" class="btn-main" style="width: 100%; background: #db4437;">
+                <span style="font-size: 1.2rem;">G</span>&nbsp;&nbsp;المتابعة باستخدام Google
+            </button>
+        </div>
+    </div>
+
+    <!-- شاشة إعداد الحساب -->
+    <div id="welcome-screen" class="page-view fade-in hidden">
+        <h1 class="main-title">أهلاً بك في المنصة! 🎉</h1>
+        <h2 style="font-size: 1.2rem; margin-bottom: 5px; font-weight: bold; color: #1a2f3a;">لنقم بإعداد ملفك الشخصي</h2>
+        
+        <div class="onboarding-card glass-box">
+            <button id="reg-back-btn" class="back-btn hidden" onclick="regGoBack()">🔙 رجوع</button>
+
+            <div id="step-1-grade">
+                <h3 class="onboarding-title">اختر صفك الدراسي 🎯</h3>
+                <div class="grades-grid">
+                    <button class="step-btn grade-btn">الصف التاسع</button>
+                    <button class="step-btn grade-btn">الصف العاشر</button>
+                    <button class="step-btn grade-btn">الصف الحادي عشر</button>
+                    <button class="step-btn grade-btn">الصف الثاني عشر</button>
+                </div>
+            </div>
+
+            <div id="step-pathway" class="hidden">
+                <h3 class="onboarding-title">اختر مسارك الدراسي</h3>
+                <div class="pathway-selection">
+                    <button class="step-btn pathway-btn">🔬 المسار العلمي</button>
+                    <button class="step-btn pathway-btn">📖 المسار الأدبي</button>
+                </div>
+            </div>
+
+            <div id="step-subjects" class="hidden">
+                <h3 class="onboarding-title">اختر 8 مواد دراسية</h3>
+                <div id="subjects-grid" class="subjects-grid"></div>
+                <span id="subjects-counter" class="counter-text">تم اختيار 0 من 8 مواد</span>
+                <button id="confirm-subjects-btn" class="btn-main" style="width:100%; margin-top:15px;" disabled>تأكيد المواد والمتابعة</button>
+            </div>
+
+            <div id="step-2-gender" class="hidden">
+                <h3 class="onboarding-title">حدد جنسك لتخصيص المنصة</h3>
+                <div class="gender-selection">
+                    <button class="step-btn gender-btn" style="background:#114a31; color:white;">👦🏻 طالب</button>
+                    <button class="step-btn gender-btn" style="background:#c2a077; color:white; border-color:#c2a077;">👧🏻 طالبة</button>
+                </div>
+            </div>
+
+            <div id="step-3-name" class="hidden">
+                <h3 class="onboarding-title">ما هو اسمك الأول؟</h3>
+                <input type="text" id="student-name" class="custom-input" style="text-align: center;" placeholder="اكتب اسمك الكريم..." autocomplete="off">
+                <button id="start-btn" class="btn-main" style="width:100%;">احفظ بياناتي وابدأ 🚀</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- لوحة التحكم الرئيسية -->
+    <div id="main-dashboard" class="hidden fade-in">
+        <header class="glass-header">
+            <div class="header-right">
+                <img src="Gemini_Generated_Image_tedhl1tedhl1tedh.jfif" alt="الشعار" class="navbar-logo">
+                <div id="user-greeting" class="user-greeting">مرحباً بك 👋</div>
+                <div style="background: rgba(40,167,69,0.1); color:#28a745; padding: 5px 12px; border-radius: 10px; font-size:0.8rem; font-weight:bold; border: 1px solid rgba(40,167,69,0.3);">🟢 متصل سحابياً</div>
+            </div>
+            <button class="logout-btn" id="btn-logout" onclick="forceLogout()">تسجيل الخروج 🚪</button>
+        </header>
+
+        <div class="side-goals-dropdown" onclick="this.classList.toggle('expanded')">
+            <div class="side-goals-title">
+                <span>🎯 أهداف أخرى</span>
+                <span style="font-size:0.8rem; color:#888;">▼</span>
+            </div>
+            <ul class="side-goals-list">
+                <li>🚀 رفع مستوى التحصيل الدراسي</li>
+                <li>🧠 تعزيز مهارات التعلم الذاتي</li>
+                <li>💡 تنمية التفكير الإبداعي والنقدي</li>
+                <li>🏆 الجاهزية التامة للمرحلة الجامعية</li>
+                <li>🤝 تفعيل المشاركة المجتمعية للطلاب</li>
+            </ul>
+        </div>
+
+        <main style="padding-top: 15vh; display: flex; flex-direction: column; align-items: center; max-width: 1000px; margin: 0 auto; width: 100%; padding-bottom: 50px; padding-left: 20px; padding-right: 20px;">
+            <div style="display:flex; flex-direction:column; gap:15px; width:100%; margin-bottom:40px;">
+                <div style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(3px); border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 15px; padding:20px; text-align:center;">
+                    <h3 style="color:var(--c); margin-bottom:10px; font-size:1.3rem; display:flex; align-items:center; justify-content:center; gap:8px; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">👁️ رؤية المدرسة</h3>
+                    <p style="font-size: 1.4rem; font-weight: bold; color:#1a2f3a; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">تعليم .. أخلاق .. إبـداع</p>
+                </div>
+                <div style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(3px); border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 15px; padding:20px; text-align:center;">
+                    <h3 style="color:var(--c); margin-bottom:10px; font-size:1.3rem; display:flex; align-items:center; justify-content:center; gap:8px; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">🎯 أهداف منصة أفق الفاروق</h3>
+                    <p style="color:#222; font-size:1.1rem; line-height:1.8; font-weight:bold; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">المنصة الرقمية المتكاملة لمدرسة الفاروق (10-12). صُممت لتكون المرشد والمساعد الأول للطالب في مسيرته الدراسية، من خلال توفير بيئة ذكية تدعم التميز الأكاديمي، وتنظم الوقت، وتساعد في اختيار التخصص الجامعي بخطى واثقة.</p>
+                </div>
+            </div>
+<!-- نبذة من نحن - الشركة الطلابية -->
+<div style="width: 100%; margin-bottom: 30px; border: 2px solid var(--c); border-radius: 20px; background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06); padding: 25px; text-align: right;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; border-bottom: 2px solid rgba(17,74,49,0.1); padding-bottom: 10px;">
+        <h3 style="color: var(--c); font-size: 1.4rem; margin: 0;">🏢 من نحن | شركة أُفُق الفاروق الطلابية</h3>
+        <span class="badge">مدرسة الفاروق للتعليم الأساسي (10-12)</span>
+    </div>
+    <p style="color: #222; font-size: 1.05rem; line-height: 1.85; font-weight: 600; margin-bottom: 15px;">
+        نحن <b>شركة طلابية رائدة</b> انطلقت من رحاب <b>مدرسة الفاروق للتعليم الأساسي</b> بسلطنة عُمان، نسعى إلى إحداث نقلة نوعية في التعليم الرقمي عبر توفير منصة ذكية شاملة تجمع للطالب كافة الملخصات، الاختبارات، المراجعات المرئية، والدورات المهارية والتقنية الحديثة التي تهيئه للمرحلة الجامعية وسوق العمل.
+    </p>
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; background: rgba(0,0,0,0.03); padding: 10px 15px; border-radius: 12px;">
+        <div style="font-size: 1rem; color: #333; font-weight: bold;">👨‍💻 مؤسس ومطور المشروع: <span style="color: var(--c); font-weight: 900; direction: ltr; display: inline-block;">Ali Mohammed Al-Rahma</span></div>
+        <div style="font-size: 0.95rem; color: var(--c); font-weight: bold;">🇴🇲 مدرسة الفاروق للتعليم الأساسي</div>
+    </div>
+</div>
+            <!-- لوحة الطالب -->
+            <div id="student-dashboard-widget" style="width: 100%; margin-bottom: 40px; border: 1px solid rgba(255,255,255,0.8); border-radius: 20px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); padding: 25px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 15px; flex: 1; min-width: 250px;">
+                    <img id="dashboard-avatar" src="" alt="صورة الطالب" style="width: 85px; height: 85px; border-radius: 50%; border: 4px solid var(--c); object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    <div>
+                        <h3 style="color: var(--c); font-size: 1.4rem; margin-bottom: 5px;">أهلاً <span id="dash-name"></span>، صباح الإنجاز! ☀️</h3>
+                        <p style="color: #555; font-weight: 600; font-size: 1.05rem;">مستعد تحقق أهدافك اليوم؟ | <span id="dash-grade"></span></p>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 15px; flex: 1; min-width: 250px; justify-content: center;">
+                    <div style="background: rgba(255,255,255,0.6); padding: 15px; border-radius: 15px; text-align: center; flex: 1; border: 1px solid rgba(0,0,0,0.05);">
+                        <div style="font-size: 1.8rem; margin-bottom: 5px;">🔥</div>
+                        <div style="font-weight: bold; color: var(--c); font-size: 1.2rem;"><span id="dash-streak">1</span> أيام</div>
+                        <div style="font-size: 0.85rem; color: #666; font-weight:bold;">متتالية</div>
+                    </div>
+                    
+                    <div onclick="openGoalModal()" style="background: rgba(255,255,255,0.6); padding: 15px; border-radius: 15px; text-align: center; flex: 1; border: 1px solid rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; position: relative;">
+                        <div style="font-size: 1.8rem; margin-bottom: 5px;">🎯</div>
+                        <div style="font-weight: bold; color: var(--c); font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px; margin: 0 auto;" id="dash-goal-text">حدد هدفك</div>
+                        <div style="font-size: 0.85rem; color: #666; font-weight:bold; margin-top:2px;">هدف الأسبوع</div>
+                        <button id="dash-goal-btn" onclick="event.stopPropagation(); completeWeeklyGoal()" style="position:absolute; top:-10px; right:-10px; background:#28a745; color:white; border:none; border-radius:50%; width:30px; height:30px; cursor:pointer; display:none; box-shadow:0 4px 10px rgba(0,0,0,0.1);">✔️</button>
+                    </div>
+                </div>
+
+                <div style="flex: 1; min-width: 250px; background: rgba(255,255,255,0.6); padding: 15px; border-radius: 15px; border: 1px solid rgba(0,0,0,0.05);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <div style="font-weight: bold; color: var(--c); font-size: 1.1rem;">مستوى <span id="dash-level">1</span> 🌟</div>
+                        <div style="font-weight: bold; color: #c2a077; font-size: 1.1rem;"><span id="dash-xp">0</span> XP</div>
+                    </div>
+                    <div style="height: 14px; background: rgba(0,0,0,0.05); border-radius: 9px; overflow: hidden; margin-bottom: 15px;">
+                        <i id="dash-xp-bar" style="display: block; height: 100%; width: 0%; background: linear-gradient(90deg, #f1c40f, #f39c12); border-radius: 9px; transition: width 0.5s ease;"></i>
+                    </div>
+                    <button class="btn-main" style="width: 100%; padding: 6px; font-size: 0.95rem; background: var(--c);" onclick="openModal('xp-modal')">كيف أجمع النقاط؟ 🏆</button>
+                </div>
+            </div>
+
+            <h2 style="color:var(--c); align-self:flex-start; font-size:1.5rem; margin-bottom: 10px; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">الأقسام الرئيسية 📌</h2>
+            <div class="sections-grid">
+                <div class="section-card" onclick="showModule('pathways-view')">
+                    <div class="section-icon">🎯</div>
+                    <div class="section-text-container">
+                        <div class="section-title">المسارات الجامعية</div>
+                        <div class="section-desc">دليلك لاختيار التخصص والجامعة</div>
+                    </div>
+                </div>
+                <div class="section-card" onclick="showModule('summaries-view')">
+                    <div class="section-icon">📚</div>
+                    <div class="section-text-container">
+                        <div class="section-title">الملخصات الدراسية</div>
+                        <div class="section-desc">مذكرات ومراجعات لجميع المواد</div>
+                    </div>
+                </div>
+                <div class="section-card" onclick="showModule('english-view')">
+                    <div class="section-icon">🔤</div>
+                    <div class="section-text-container">
+                        <div class="section-title">تعلم الإنجليزية</div>
+                        <div class="section-desc">كلمات، قواعد واختبارات تفاعلية</div>
+                    </div>
+                </div>
+                <div class="section-card" onclick="showModule('academic-view')">
+                    <div class="section-icon">⚙️</div>
+                    <div class="section-text-container">
+                        <div class="section-title">الخدمات الأكاديمية</div>
+                        <div class="section-desc">المهام، الخطط وحاسبة المعدل</div>
+                    </div>
+                </div>
+                <div class="section-card" onclick="showModule('tracking-view')">
+                    <div class="section-icon">📅</div>
+                    <div class="section-text-container">
+                        <div class="section-title">التنظيم والمتابعة</div>
+                        <div class="section-desc">الجداول، المواعيد وخطط المراجعة</div>
+                    </div>
+                </div>
+                <div class="section-card" onclick="showModule('skills-view')">
+                    <div class="section-icon">💡</div>
+                    <div class="section-text-container">
+                        <div class="section-title">تطوير المهارات</div>
+                        <div class="section-desc">طرق المذاكرة، الأدعية والأمن السيبراني</div>
+                    </div>
+                </div>
+                <div class="section-card" onclick="showModule('community-view')" style="grid-column: 1 / -1; justify-content: center;">
+                    <div class="section-icon">💬</div>
+                    <div class="section-text-container">
+                        <div class="section-title">المجتمع والتواصل</div>
+                        <div class="section-desc">مساحة النقاش وتقديم الاقتراحات للمنصة</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- حاويات الأقسام (Modules) -->
+    <!-- ========================================== -->
+
+    <div id="pathways-view" class="module-view" style="padding-left:20px; padding-right:20px;">
+        <button class="back-btn" onclick="closeModule()">🔙 الرجوع للوحة التحكم</button>
+        <h2 style="color:var(--c); font-size:2.5rem; margin-bottom:30px; text-align:center;">المسارات الجامعية 🎯</h2>
+        <div id="dynamic-majors-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap:25px; width:100%;"></div>
+    </div>
+
+    <!-- 1. شاشة اختيار المواد (الملخصات) -->
+    <div id="summaries-view" class="module-view" style="padding-left:20px; padding-right:20px;">
+        <button class="back-btn" onclick="closeModule()">🔙 الرجوع للوحة التحكم</button>
+        <h2 style="color:var(--c); font-size:2.5rem; margin-bottom:30px; text-align:center; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">الملخصات الدراسية 📚</h2>
+        <!-- تنبيه الأخطاء في الملخصات -->
+        <div style="background: rgba(255, 71, 87, 0.05); border: 2px dashed rgba(255, 71, 87, 0.4); border-radius: 16px; padding: 18px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span style="font-size: 2rem;">⚠️</span>
+                <p style="margin: 0; color: #2f3542; font-weight: bold; font-size: 1.05rem; line-height: 1.6;">
+                    <span style="color: #ff4757; font-size: 1.15rem;">تنويه هام للطلاب:</span><br>
+                    إذا واجهتك أي مشكلة، خطأ في ملف، أو رابط لا يعمل داخل الملخصات، يرجى إبلاغنا فوراً لنتمكن من إصلاحه.
+                </p>
+            </div>
+            <!-- زر التواصل المباشر عبر الواتساب (معدل) -->
+            <a href="https://api.whatsapp.com/send?phone=96898132390" target="_blank" class="btn-main" style="background: #2ecc71; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3); padding: 12px 25px; font-size: 1rem; border-radius: 12px; margin: 0; color: white; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; width: fit-content;">
+                مراسلة عبر واتساب 💬
+            </a>
+        </div>
+        <div id="dynamic-study-subjects" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:20px; width:100%; max-width:1000px; margin:0 auto;"></div>
+    </div>
+
+    <!-- 2. شاشة أقسام المادة (الاختبارات، الملخصات..) -->
+    <div id="subject-categories-view" class="module-view" style="padding-left:20px; padding-right:20px;">
+        <button class="back-btn" onclick="showModule('summaries-view')">🔙 الرجوع لقائمة المواد</button>
+        <h2 id="cat-view-title" style="color:var(--c); font-size:2.5rem; margin-bottom:30px; text-align:center; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);"></h2>
+        <div id="dynamic-categories-container" style="width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
+    </div>
+
+    
+    <!-- شاشة عرض الملف (Iframe View) -->
+    <div id="iframe-view" class="module-view" style="padding-left:10px; padding-right:10px; height: 100vh; padding-bottom: 20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <button id="iframe-back-btn" class="back-btn" style="margin:0;">🔙 رجوع للملفات</button>
+            <button id="iframe-external-btn" class="btn-main" style="margin:0; background:#28a745;">فتح في درايف خارجي ↗️</button>
+        </div>
+        <h2 id="iframe-title" style="color:var(--c); font-size:1.5rem; margin-bottom:15px; text-align:center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></h2>
+        <div style="flex:1; width:100%; background:#fff; border-radius:15px; overflow:hidden; border:2px solid rgba(0,0,0,0.1); box-shadow:0 10px 30px rgba(0,0,0,0.1);">
+            <iframe id="file-iframe" src="" style="width:100%; height:100%; border:none; min-height: 60vh;"></iframe>
+        </div>
+    </div>
+
+    <!-- 3. شاشة ملفات القسم (شكل أنيق ومرتب) -->
+    <div id="subject-files-view" class="module-view" style="padding-left:20px; padding-right:20px;">
+        <button id="back-to-categories-btn" class="back-btn">🔙 الرجوع لأقسام المادة</button>
+        <h2 id="files-view-title" style="color:var(--c); font-size:2rem; margin-bottom:30px; text-align:center; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);"></h2>
+        <div id="dynamic-files-container" style="width: 100%; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column;"></div>
+    </div>
+
+    <div id="english-view" class="module-view" style="padding-left:20px; padding-right:20px;">
+        <button class="back-btn" onclick="closeModule()">🔙 الرجوع للوحة التحكم</button>
+        <h2 style="color:var(--c); font-size:2.5rem; margin-bottom:30px; text-align:center;">تعلم اللغة الإنجليزية 🔤</h2>
+        
+        <div class="big-glass-card">
+            <h3>🌟 كلمات اليوم (8 كلمات يومياً)</h3>
+            <div id="eng-words-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:15px; margin-bottom:20px;"></div>
+        </div>
+
+        <div class="grid-2-cols">
+            <div class="big-glass-card" style="margin:0;">
+                <h3>📝 اختبار شامل (كلمات وقواعد)</h3>
+                <div id="eng-quiz-container">
+                    <button class="btn-main" onclick="startEnglishQuiz()" style="width:100%; font-size:1.2rem; padding:15px;">ابدأ الاختبار الآن 🚀</button>
+                </div>
+            </div>
+            
+            <div class="big-glass-card" style="margin:0;">
+                <h3>📖 قسم قواعد اللغة الإنجليزية (صف 7 - 12)</h3>
+                <p style="margin-bottom:15px; color:#555; font-weight:bold;">شرح مفصل لجميع قواعد الإنجليزية من الصف السابع إلى الثاني عشر مع تحديد المرحلة والأمثلة:</p>
+                <button class="btn-main" onclick="showModule('english-grammar-view')" style="width:100%; font-size:1.2rem; padding:15px;">فتح قسم القواعد الشامل 📚</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- شاشة اختبار اللغة الإنجليزية المستقلة -->
+    <div id="english-quiz-view" class="module-view" style="padding-left:20px; padding-right:20px;">
+        <button class="back-btn" onclick="showModule('english-view')">🔙 الرجوع لقسم الإنجليزية</button>
+        <h2 style="color:var(--c); font-size:2.5rem; margin-bottom:30px; text-align:center; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">📝 اختبار الإنجليزية الشامل</h2>
+        
+        <div class="big-glass-card" style="margin: 0 auto; max-width: 800px;">
+            <div id="quiz-full-container"></div>
+        </div>
+    </div>
+<!-- قسم قواعد اللغة الإنجليزية الشامل (صف 7 - 12) -->
+<div id="english-grammar-view" class="module-view" style="padding-left:20px; padding-right:20px;">
+    <button class="back-btn" onclick="showModule('english-view')">🔙 الرجوع لقسم الإنجليزية</button>
+    <h2 style="color:var(--c); font-size:2.3rem; margin-bottom:25px; text-align:center;">📖 موسوعة قواعد اللغة الإنجليزية (صف 7 - 12)</h2>
+
+    <!-- المرحلة الأولى: 7 - 8 -->
+    <div class="big-glass-card">
+        <h3>📘 قواعد الصفين السابع والثامن (Grades 7 - 8)</h3>
+        <div class="skill-card">
+            <h4>1. المضارع البسيط (Present Simple) - [صف 7 - 8]</h4>
+            <p><b>الاستخدام:</b> للعادات اليومية والروتين والحقائق العلمية.<br><b>القاعدة:</b> نضيف <b>(s / es)</b> للفعل مع المفرد (He, She, It)، ونستخدم المصدر مع (I, You, We, They). وفي النفي نستخدم <b>don't / doesn't + المصدر</b>.<br><b>مثال:</b> Ali <b>reads</b> a book every day. / They <b>don't play</b> at night.</p>
+        </div>
+        <div class="skill-card">
+            <h4>2. المضارع المستمر (Present Continuous) - [صف 7 - 8]</h4>
+            <p><b>الاستخدام:</b> لحدث يقع الآن أثناء الكلام (الكلمات الدالة: now, look!, listen!, at the moment).<br><b>القاعدة:</b> <b>am / is / are + Verb-ing</b>.<br><b>مثال:</b> Look! It <b>is raining</b> outside.</p>
+        </div>
+        <div class="skill-card">
+            <h4>3. الماضي البسيط والماضي المستمر (Past Simple & Continuous) - [صف 7 - 8]</h4>
+            <p><b>الماضي البسيط:</b> حدث انتهى في الماضي (بإضافة ed أو تصريف ثانٍ شاذ)، وفي النفي <b>didn't + المصدر</b>.<br><b>الماضي المستمر:</b> <b>was / were + Verb-ing</b> لحدث كان مستمراً وقطعه حدث آخر.<br><b>مثال:</b> While I <b>was studying</b>, the phone <b>rang</b>.</p>
+        </div>
+        <div class="skill-card">
+            <h4>4. المقارنة والتفضيل (Comparatives & Superlatives) - [صف 7 - 8]</h4>
+            <p><b>الصفات القصيرة:</b> نضيف <b>-er than</b> للمقارنة، و <b>the -est</b> للتفضيل.<br><b>الصفات الطويلة:</b> نستخدم <b>more ... than</b> للمقارنة، و <b>the most ...</b> للتفضيل.<br><b>مثال:</b> Oman is <b>larger than</b> Bahrain. / Reading is <b>the most useful</b> hobby.</p>
+        </div>
+    </div>
+
+    <!-- المرحلة الثانية: 9 - 10 -->
+    <div class="big-glass-card">
+        <h3>📗 قواعد الصفين التاسع والعاشر (Grades 9 - 10)</h3>
+        <div class="skill-card">
+            <h4>1. المضارع التام (Present Perfect) - [صف 9 - 10]</h4>
+            <p><b>القاعدة:</b> <b>have / has + V3 (التصريف الثالث)</b>.<br><b>الكلمات الدالة:</b> <b>since</b> (تأتي بعدها نقطة بداية الزمن)، <b>for</b> (تأتي بعدها المدة المحسوبة)، <b>already / just / yet / ever / never</b>.<br><b>مثال:</b> He <b>has lived</b> in Sohar <b>since</b> 2018. / I <b>have just finished</b> my task.</p>
+        </div>
+        <div class="skill-card">
+            <h4>2. الجمل الشرطية (Conditionals: Zero, First, Second) - [صف 9 - 10]</h4>
+            <p>• <b>Zero (الحقائق):</b> If + Present Simple ➔ Present Simple (If you heat ice, it melts).<br>• <b>First (احتمال مستقبلي):</b> If + Present Simple ➔ <b>will + المصدر</b> (If you study hard, you <b>will pass</b>).<br>• <b>Second (تخيل بالحاضر):</b> If + Past Simple ➔ <b>would + المصدر</b> (If I had a car, I <b>would drive</b> to Muscat).</p>
+        </div>
+        <div class="skill-card">
+            <h4>3. المبني للمجهول الأساسي (Passive Voice) - [صف 9 - 10]</h4>
+            <p><b>القاعدة:</b> <b>المفعول به (Object) + Verb to be + التصريف الثالث (V3)</b>.<br>• في المضارع: <b>am / is / are + V3</b>.<br>• في الماضي: <b>was / were + V3</b>.<br><b>مثال:</b> The fort <b>was built</b> hundreds of years ago.</p>
+        </div>
+        <div class="skill-card">
+            <h4>4. الأفعال الناقصة والإلزام والعادات (Modals & Used to) - [صف 9 - 10]</h4>
+            <p>• <b>must / have to + المصدر:</b> للإلزام القوي | <b>should + المصدر:</b> للنصيحة.<br>• <b>used to + المصدر:</b> لعادة كانت في الماضي وتوقفت الآن.<br><b>مثال:</b> I <b>used to walk</b> to school, but now I go by bus.</p>
+        </div>
+    </div>
+
+    <!-- المرحلة الثالثة: 11 - 12 -->
+    <div class="big-glass-card">
+        <h3>📕 قواعد الصفين الحادي عشر والثاني عشر (Grades 11 - 12)</h3>
+        <div class="skill-card">
+            <h4>1. الماضي التام والماضي التام المستمر (Past Perfect) - [صف 11 - 12]</h4>
+            <p><b>القاعدة:</b> <b>had + V3</b> لوصف الحدث الأقدم الذي وقع أولاً قبل حدث ماضٍ آخر (يأتي مع After, As soon as, Before, By the time).<br><b>الماضي التام المستمر:</b> <b>had been + Verb-ing</b> للتركيز على استمرارية الحدث الأول.<br><b>مثال:</b> After the teacher <b>had explained</b> the lesson, the bell rang.</p>
+        </div>
+        <div class="skill-card">
+            <h4>2. الكلام المنقول (Reported Speech) - [صف 11 - 12]</h4>
+            <p><b>القاعدة:</b> إرجاع الزمن خطوة للماضي عند نقل الكلام: (المضارع البسيط ➔ ماضي بسيط | المضارع المستمر ➔ ماضي مستمر | الماضي البسيط ➔ ماضي تام had + V3 | will ➔ would). وفي الأسئلة نستخدم <b>if / whether</b> ونرتب الجملة (فاعل ثم فعل).<br><b>مثال:</b> Salim said that he <b>was preparing</b> for the final exam.</p>
+        </div>
+        <div class="skill-card">
+            <h4>3. الشرطية الثالثة والتمني (Third Conditional & Wishes) - [صف 11 - 12]</h4>
+            <p><b>الشرطية الثالثة (للندم على الماضي):</b> <b>If + had + V3 ➔ would have + V3</b>.<br><b>التمني:</b> <b>I wish + Past Simple</b> (تمني بالحاضر) | <b>I wish + had + V3</b> (ندم على الماضي).<br><b>مثال:</b> If I <b>had woken up</b> early, I <b>would have caught</b> the bus.</p>
+        </div>
+        <div class="skill-card">
+            <h4>4. عبارات الوصل والمبني للمجهول المتقدم (Relative Clauses & Causative) - [صف 11 - 12]</h4>
+            <p>• <b>ضمائر الوصل:</b> <b>who</b> (عاقل)، <b>which</b> (غير عاقل)، <b>where</b> (مكان)، <b>whose</b> (ملكية).<br>• <b>صيغة السببية (Causative):</b> <b>have / get + المفعول به + V3</b>.<br><b>مثال:</b> The student <b>whose</b> project won first place is from Al-Farooq School.</p>
+        </div>
+    </div>
+</div>
+    <div id="academic-view" class="module-view" style="padding-left:20px; padding-right:20px;">
+        <button class="back-btn" onclick="closeModule()">🔙 الرجوع للوحة التحكم</button>
+        <h2 style="color:var(--c); font-size:2.5rem; margin-bottom:30px; text-align:center;">الخدمات الأكاديمية ⚙️</h2>
+        
+        <div class="grid-2-cols">
+            <div class="big-glass-card" style="margin:0;">
+                <h3>✅ قائمة المهام والواجبات</h3>
+                <div style="display:flex; gap:10px; margin-bottom:20px;">
+                    <input type="text" id="task-name" class="custom-input" style="margin:0;" placeholder="اسم المهمة/الواجب">
+                    <select id="task-sub" class="custom-input" style="margin:0; width:120px;"></select>
+                    <button class="btn-main" onclick="addListItem('tasks-list', 'task')">إضافة</button>
+                </div>
+                <div id="tasks-list-container" style="max-height: 400px; overflow-y: auto; padding-right:5px;"></div>
+            </div>
+
+            <div class="big-glass-card" style="margin:0;">
+                <h3>🗓️ الخطة الأسبوعية للمذاكرة</h3>
+                <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px;">
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" id="plan-goal" class="custom-input" style="margin:0;" placeholder="الهدف (مثال: تلخيص الوحدة)">
+                        <select id="plan-sub" class="custom-input" style="margin:0; width:150px;"></select>
+                    </div>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <input type="date" id="plan-date" class="custom-input" style="margin:0;">
+                        <label style="font-weight:bold; color:var(--c); white-space:nowrap;"><input type="checkbox" id="plan-rep"> تتكرر أسبوعياً</label>
+                        <button class="btn-main" onclick="addListItem('plans-list', 'plan')">إضافة</button>
+                    </div>
+                </div>
+                <div id="plans-list-container" style="max-height: 350px; overflow-y: auto; padding-right:5px;"></div>
+                <button class="btn-main" style="width:100%; margin-top:15px; background:#28a745;" onclick="completeWeeklyPlan()">أنهيت خطة هذا الأسبوع ✅ (+50 XP)</button>
+            </div>
+        </div>
+
+        <div class="big-glass-card" style="margin-top:25px;">
+            <h3>🧮 حاسبة المعدل الفصلي</h3>
+            <div id="gpa-inputs" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:20px;"></div>
+            <div style="text-align:center;">
+                <button class="btn-main" onclick="calcGPA()" style="width:250px; font-size:1.2rem;">احسب المعدل</button>
+                <div id="gpa-result" style="font-size:1.8rem; font-weight:900; color:var(--c); margin-top:15px;">—</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tracking-view" class="module-view" style="padding-left:20px; padding-right:20px;">
+        <button class="back-btn" onclick="closeModule()">🔙 الرجوع للوحة التحكم</button>
+        <h2 style="color:var(--c); font-size:2.5rem; margin-bottom:30px; text-align:center;">التنظيم والمتابعة 📅</h2>
+
+        <div class="big-glass-card">
+            <h3>🏫 جدول الحصص المدرسي</h3>
+            <div style="overflow-x:auto;">
+                <table class="tt" id="timetable" style="width:100%; border-collapse:separate; border-spacing:5px;"></table>
+            </div>
+        </div>
+
+        <div class="big-glass-card">
+            <h3>📆 مواعيد الاختبارات القادمة</h3>
+            <div style="display:flex; gap:10px; margin-bottom:20px;">
+                <input type="text" id="exam-name" class="custom-input" style="margin:0;" placeholder="اسم الاختبار">
+                <select id="exam-sub" class="custom-input" style="margin:0; width:150px;"></select>
+                <input type="date" id="exam-date" class="custom-input" style="margin:0; width:160px;">
+                <button class="btn-main" onclick="addExam()">إضافة الموعد</button>
+            </div>
+            <div id="exams-container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:15px;"></div>
+        </div>
+
+        <div class="big-glass-card">
+            <h3>📖 خطة المراجعة الذكية</h3>
+            <p style="margin-bottom:15px; font-weight:bold; color:#555;">أضف الدروس لكل اختبار وضع علامة صح عند الانتهاء منها.</p>
+            <div id="review-plans-container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(350px, 1fr)); gap:20px;"></div>
+        </div>
+
+        <!-- القسم الجديد: سجل الدرجات -->
+        <div class="big-glass-card">
+            <h3>📊 سجل درجات الاختبارات</h3>
+            <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; align-items:center;">
+                <input type="text" id="grd-name" class="custom-input" style="margin:0; flex:1; min-width:140px;" placeholder="اسم الاختبار (مثال: القصير الأول)">
+                <select id="grd-sub" class="custom-input" style="margin:0; flex:1; min-width:120px;"></select>
+                
+                <div style="display:flex; flex:1; min-width:180px; gap:5px;">
+                    <select id="grd-type" class="custom-input" style="margin:0; flex:1;" onchange="if(this.value==='custom') {this.style.display='none'; document.getElementById('grd-type-custom').style.display='block'; document.getElementById('grd-type-custom').focus();}">
+                        <option value="سؤال قصير">سؤال قصير</option>
+                        <option value="اختبار قصير">اختبار قصير</option>
+                        <option value="إختبار عملي ">إختبار عملي </option>
+                        <option value="اختبار نهائي">اختبار نهائي</option>
+                        <option value="custom">✍️ اكتب بنفسك...</option>
+                    </select>
+                    <input type="text" id="grd-type-custom" class="custom-input" style="margin:0; flex:1; display:none;" placeholder="اكتب نوع الاختبار...">
+                </div>
+
+                <div style="display:flex; flex:1; min-width:160px; align-items:center; justify-content:center; gap:5px; background:rgba(0,0,0,0.03); padding:5px; border-radius:10px; border:1px solid rgba(0,0,0,0.05);">
+                    <input type="number" id="grd-score" class="custom-input" style="margin:0; width:70px; padding:5px; text-align:center;" placeholder="الدرجة" min="0" max="100">
+                    <span style="font-weight:900; color:var(--c);">من</span>
+                    <input type="number" id="grd-max" class="custom-input" style="margin:0; width:70px; padding:5px; text-align:center;" placeholder="الاختبار نهائية" min="0" max="100" value="10">
+                </div>
+
+                <input type="date" id="grd-date" class="custom-input" style="margin:0; flex:1; min-width:130px;">
+                <button class="btn-main" style="flex:1; min-width:120px;" onclick="addGradeRecord()">حفظ الدرجة 💾</button>
+            </div>
+            <div id="grades-container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:15px;"></div>
+        </div>
+    </div>
+
+    <div id="skills-view" class="module-view" style="padding-left:20px; padding-right:20px;">
+        <button class="back-btn" onclick="closeModule()">🔙 الرجوع للوحة التحكم</button>
+        <h2 style="color:var(--c); font-size:2.5rem; margin-bottom:30px; text-align:center;">تطوير المهارات 💡</h2>
+
+        <div class="big-glass-card">
+            <h3>🧠 طرق المذاكرة الذكية</h3>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
+                <div class="skill-card"><h4>🍅 تقنية بومودورو</h4><p>ذاكر بتركيز 25 دقيقة، وخذ راحة 5 دقائق. تمنع الإرهاق وتزيد الاستيعاب.</p></div>
+                <div class="skill-card"><h4>🔁 الاسترجاع النشط</h4><p>أغلق الكتاب واكتب ما تتذكره. أفضل بكثير من إعادة القراءة.</p></div>
+                <div class="skill-card"><h4>👨‍🏫 تقنية فاينمان</h4><p>اشرح الدرس بصوت عالٍ كأنك تعلم شخصاً آخر لتكتشف ثغرات فهمك.</p></div>
+            </div>
+        </div>
+
+        <div class="big-glass-card">
+            <h3>🤲 أدعية النجاح والتوفيق</h3>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
+                <div class="skill-card"><h4>قبل المذاكرة</h4><p>"اللهم إني أسألك فهم النبيين، وحفظ المرسلين، والملائكة المقربين."</p></div>
+                <div class="skill-card"><h4>عند النسيان</h4><p>"اللهم يا جامع الناس ليوم لا ريب فيه، اجمع علي ضالتي."</p></div>
+                <div class="skill-card"><h4>عند الاختبار</h4><p>"اللهم لا سهل إلا ما جعلته سهلاً، وأنت تجعل الحزن إذا شئت سهلاً."</p></div>
+            </div>
+        </div>
+
+        <div class="big-glass-card">
+            <h3>💻 أكاديمية الدورات التقنية والمهارية (6 دورات شاملة)</h3>
+            <p style="margin-bottom:20px; font-weight:bold; color:#555;">اضغط على أي دورة لفتح القسم الخاص بها مع الشروحات المفصلة والمقاطع التعليمية:</p>
+  
+            <!-- قائمة الدورات -->
+            <div id="skills-courses-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+                <div class="category-card" onclick="openTechCourse('cyber')" style="margin:0;">
+                    <div class="category-icon">🛡️</div>
+                    <div class="category-info"><h3>دورة الأمن السيبراني</h3><p>حماية البيانات والشبكات وكشف الاختراق</p></div>
+                    <div class="category-arrow">👈</div>
+                </div>
+                <div class="category-card" onclick="openTechCourse('python')" style="margin:0;">
+                    <div class="category-icon">🐍</div>
+                    <div class="category-info"><h3>دورة تعلم البايثون</h3><p>أساسيات البرمجة وبناء التطبيقات من الصفر</p></div>
+                    <div class="category-arrow">👈</div>
+                </div>
+                <div class="category-card" onclick="openTechCourse('blender')" style="margin:0;">
+                    <div class="category-icon">🧊</div>
+                    <div class="category-info"><h3>دورة بلندر (Blender 3D)</h3><p>التصميم ثلاثي الأبعاد والنمذجة والإضاءة</p></div>
+                    <div class="category-arrow">👈</div>
+                </div>
+                <div class="category-card" onclick="openTechCourse('design')" style="margin:0;">
+                    <div class="category-icon">🎨</div>
+                    <div class="category-info"><h3>دورة التصميم الجرافيكي</h3><p>قواعد التصميم وتناسق الألوان والشعارات</p></div>
+                    <div class="category-arrow">👈</div>
+                </div>
+                <div class="category-card" onclick="openTechCourse('ai')" style="margin:0;">
+                    <div class="category-icon">🤖</div>
+                    <div class="category-info"><h3>دورة الذكاء الاصطناعي</h3><p>تعلم الآلة واحتراف هندسة الأوامر</p></div>
+                    <div class="category-arrow">👈</div>
+                </div>
+                <div class="category-card" onclick="openTechCourse('web')" style="margin:0;">
+                    <div class="category-icon">🌐</div>
+                    <div class="category-info"><h3>دورة تصميم المواقع</h3><p>تطوير المواقع بـ HTML, CSS, JavaScript</p></div>
+                    <div class="category-arrow">👈</div>
+                </div>
+            </div>
+  
+<!-- محتوى الدورة (يظهر فقط عند الدخول للدورة) -->
+<div id="single-course-view" class="hidden" style="margin-top:15px;">
+    <button class="back-btn" onclick="closeTechCourse()">🔙 الرجوع لقائمة الدورات</button>
+    <h3 id="sc-title" style="color:var(--c); margin-bottom:10px;"></h3>
+    <p id="sc-desc" style="color:#444; font-weight:bold; margin-bottom:20px; line-height: 1.6;"></p>
+    <h4 style="color:var(--c); font-size:1.3rem; margin-bottom:15px;">📚 محاور ودروس الدورة (اضغط للتعلم):</h4>
+    
+    <!-- الأزرار التفاعلية للدروس ستظهر هنا -->
+    <div id="sc-lessons" style="margin-bottom:30px; display:grid; gap:12px;"></div>
+    
+    <h4 style="color:var(--c); font-size:1.3rem; margin-bottom:15px;">🎬 الشروحات المرئية للدورة:</h4>
+    <div id="sc-videos" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:20px;"></div>
+</div>
+
+<!-- شاشة الشرح التفصيلي للدرس (مخفية تظهر عند الضغط) -->
+<div id="lesson-detail-view" class="hidden" style="margin-top:15px; background: rgba(255,255,255,0.95); padding: 30px; border-radius: 15px; border: 2px solid var(--c); box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+    <button class="back-btn" onclick="closeLessonDetail()" style="margin-bottom: 25px; background: #333; color: white;">🔙 الرجوع لمحتوى الدورة</button>
+    <h3 id="ld-title" style="color:var(--c); margin-bottom:20px; font-size: 1.6rem; border-bottom: 2px dashed rgba(17,74,49,0.2); padding-bottom: 15px; line-height: 1.5;"></h3>
+    <div id="ld-content" style="color:#222; font-size: 1.15rem; line-height: 2.1; font-weight: 500;"></div>
+</div>
+        </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="community-view" class="module-view" style="padding-left:20px; padding-right:20px;">
+        <button class="back-btn" onclick="closeModule()">🔙 الرجوع للوحة التحكم</button>
+        <h2 style="color:var(--c); font-size:2.5rem; margin-bottom:30px; text-align:center;">المجتمع والتواصل 💬</h2>
+
+        <div class="grid-2-cols">
+            <div class="big-glass-card" style="margin:0;">
+                <h3>🗣️ مساحة النقاش المفتوح</h3>
+                <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:15px;">
+                    <input type="text" id="disc-title" class="custom-input" style="margin:0;" placeholder="عنوان الموضوع (مثال: طريقة لفهم الفيزياء)">
+                    <textarea id="disc-body" class="custom-input" style="margin:0; height:80px; resize:none;" placeholder="اكتب موضوعك أو استفسارك هنا..."></textarea>
+                    <button class="btn-main" onclick="addPost('disc')">نشر الموضوع 📢</button>
+                </div>
+                <div id="disc-list" style="max-height:300px; overflow-y:auto; padding-right:5px;"></div>
+            </div>
+
+            <div class="big-glass-card" style="margin:0;">
+                <h3>💡 صندوق الاقتراحات للمنصة</h3>
+                <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:15px;">
+                    <textarea id="sug-body" class="custom-input" style="margin:0; height:120px; resize:none;" placeholder="اكتب مقترحك لتطوير منصة أفق الفاروق..."></textarea>
+                    <button class="btn-main" onclick="addPost('sug')">إرسال الاقتراح 📤</button>
+                </div>
+                <div id="sug-list" style="max-height:260px; overflow-y:auto; padding-right:5px;"></div>
+            </div>
+        </div>
+
+        <div class="big-glass-card" style="margin-top:25px; text-align:center;">
+            <h3 style="justify-content:center;">📞 تواصل مع إدارة الموقع</h3>
+            <p style="font-size:1.2rem; margin-bottom:15px;">نحن هنا لخدمتك! أرسل استفسارك وسنرد عليك بأقرب وقت.</p>
+            <a href="https://api.whatsapp.com/send?phone=96898132390" target="_blank" style="text-decoration: none; display: inline-block;">
+                <div style="font-size:2.5rem; font-weight:900; color:var(--c); margin-bottom:15px; letter-spacing:2px; direction:ltr; transition: 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" title="اضغط لمراسلتنا عبر واتساب">98132390</div>
+            </a>
+            <br>
+            <a href="https://api.whatsapp.com/send?phone=96898132390" target="_blank" class="btn-main" style="background:#25D366; font-size:1.3rem; padding:12px 40px; text-decoration:none;">مراسلة عبر واتساب 💬</a>
+        </div>
+    </div>
+
+    <!-- المساعد الذكي العائم -->
+    <button id="bot" title="المساعد الذكي لأفق الفاروق">🤖</button>
+    <div id="bp">
+        <h4 style="background:var(--c); color:#fff; padding:15px; text-align:center; font-size:1.2rem; margin:0;">🤖 المساعد الذكي - أفق الفاروق</h4>
+        <div id="bm" style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:10px;"><div class="m b" style="background:rgba(17,74,49,0.1); padding:12px 18px; border-radius:15px; max-width:85%; align-self:flex-start; border-bottom-right-radius:2px;">أهلاً يا بطل! اسألني عن أي درس، أو اطلب شرحاً لمسألة، وسأقوم بتبسيطها لك! 💡</div></div>
+        <div style="display:flex; gap:10px; padding:15px; background:#fff; border-top:1px solid rgba(0,0,0,0.1);">
+            <input id="bi" class="custom-input" style="margin:0;" placeholder="اكتب سؤالك...">
+            <button class="btn-main" id="bs" style="margin:0; padding:10px 15px;">إرسال</button>
+        </div>
+    </div>
+
+    <!-- Firebase Auth & Cloud Setup -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCUUuIulJf73HtxFJ9ifDSfz09J6kYLizc",
+            authDomain: "ufuq-alfarooq.firebaseapp.com",
+            projectId: "ufuq-alfarooq",
+            storageBucket: "ufuq-alfarooq.firebasestorage.app",
+            messagingSenderId: "905461495993",
+            appId: "1:905461495993:web:a9bfb25cdb21429c114368",
+            measurementId: "G-1SXT8953LK"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        let currentUser = null;
+
+        window.syncToCloud = async function() {
+            if(!currentUser) return;
+            try {
+                const dataToSave = {};
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key === 'ufuqStudentData' || key.startsWith('ufq_') || key === 'ttab') {
+                        dataToSave[key] = localStorage.getItem(key);
+                    }
+                }
+                await setDoc(doc(db, "students", currentUser.uid), dataToSave);
+            } catch (e) { console.error("Cloud Sync Error:", e); }
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                try {
+                    const docSnap = await getDoc(doc(db, "students", user.uid));
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        for (const key in data) localStorage.setItem(key, data[key]);
+                        const saved = JSON.parse(localStorage.getItem('ufuqStudentData')); window.studentData = { ...window.studentData, ...(saved || {}) };
+                        window.applyTheme();
+                        document.getElementById('global-loader').classList.add('hidden');
+                        document.getElementById('auth-screen').classList.add('hidden');
+                        document.getElementById('main-dashboard').classList.remove('hidden');
+                        window.initModules();
+                        window.updateDashboardWidget();
+                    } else {
+                        document.getElementById('global-loader').classList.add('hidden');
+                        document.getElementById('auth-screen').classList.add('hidden');
+                        document.getElementById('welcome-screen').classList.remove('hidden');
+                    }
+                } catch(e) { console.error(e); }
+            } else {
+                currentUser = null;
+                document.getElementById('global-loader').classList.add('hidden');
+                document.getElementById('main-dashboard').classList.add('hidden');
+                document.getElementById('welcome-screen').classList.add('hidden');
+                document.getElementById('auth-screen').classList.remove('hidden');
+            }
+        });
+
+        function isValidRealEmail(email) {
+            const regex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|outlook\.com|hotmail\.com|icloud\.com|yahoo\.com|live\.com|moe\.om|.*\.om|.*\.edu)$/i;
+            return regex.test(email) && email.split('@')[0].length >= 3;
+        }
+
+        window.firebaseSignOut = () => {
+            try { signOut(auth); } catch(e) {}
+        };
+        document.getElementById('btn-logout').onclick = () => window.forceLogout();
+
+        document.getElementById('btn-login').onclick = () => {
+            const email = document.getElementById('auth-email').value.trim();
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return customAlert('أدخل البريد وكلمة المرور أولاً.');
+            if(!isValidRealEmail(email)) return customAlert('عفواً، لا يُقبل البريد الوهمي! أدخل بريداً حقيقياً (مثل @gmail.com أو @outlook.com أو @moe.om).');
+            document.getElementById('global-loader').classList.remove('hidden');
+            
+            signInWithEmailAndPassword(auth, email, pass).catch(e => {
+                document.getElementById('global-loader').classList.add('hidden');
+                if(e.code === 'auth/invalid-credential' || e.code === 'auth/invalid-login-credentials' || e.code === 'auth/user-not-found' || (e.message && e.message.includes('invalid-login-credentials'))) {
+                    return customAlert('هذا البريد الإلكتروني غير مسجل في المنصة (أو كلمة المرور غير صحيحة)! إذا لم يكن لديك حساب، اضغط على زر "إنشاء حساب جديد".');
+                }
+                if(e.code === 'auth/wrong-password') return customAlert('كلمة المرور غير صحيحة.');
+                if(e.code === 'auth/invalid-email') return customAlert('صيغة البريد غير صحيحة.');
+                customAlert('هذا البريد غير مسجل في المنصة! اضغط على "إنشاء حساب جديد".');
+            });
+        };
+
+        document.getElementById('btn-signup').onclick = () => {
+            const email = document.getElementById('auth-email').value.trim();
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return customAlert('أدخل البريد وكلمة المرور أولاً.');
+            if(!isValidRealEmail(email)) return customAlert('لا يُسمح بالتسجيل ببريد وهمي! استخدم بريدك الحقيقي (مثل Gmail أو iCloud أو Outlook).');
+            if(pass.length < 6) return customAlert('كلمة المرور يجب ألا تقل عن 6 أحرف.');
+            document.getElementById('global-loader').classList.remove('hidden');
+            
+            createUserWithEmailAndPassword(auth, email, pass).catch(e => {
+                document.getElementById('global-loader').classList.add('hidden');
+                if(e.code === 'auth/email-already-in-use') return customAlert('هذا البريد مسجل مسبقاً، اضغط على زر "دخول بالبريد".');
+                if(e.code === 'auth/invalid-email') return customAlert('صيغة البريد غير صحيحة.');
+                if(e.code === 'auth/weak-password') return customAlert('كلمة المرور ضعيفة جداً.');
+                customAlert('حدث خطأ أثناء إنشاء الحساب، تأكد من اتصالك بالإنترنت.');
+            });
+        };
+
+        document.getElementById('btn-google').onclick = () => {
+            if (window.location.protocol === 'file:') {
+                return customAlert('ملاحظة: تسجيل الدخول بحساب Google يتطلب فتح الموقع عبر خادم محلي (Live Server) أو عبر رابط الموقع على الإنترنت وليس كملف محلي (file://). يمكنك حالياً الدخول بالبريد الإلكتروني مباشرة.');
+            }
+            document.getElementById('global-loader').classList.remove('hidden');
+            googleProvider.setCustomParameters({ prompt: 'select_account' });
+            signInWithPopup(auth, googleProvider).catch(e => {
+                document.getElementById('global-loader').classList.add('hidden');
+                if(e.code === 'auth/unauthorized-domain') {
+                    return customAlert('يرجى إضافة رابط موقعك في إعدادات Firebase (Authentication -> Settings -> Authorized domains).');
+                }
+                if(e.code !== 'auth/popup-closed-by-user') customAlert('تعذر الدخول بحساب جوجل، تأكد من السماح بالنوافذ المنبثقة أو سجل بالبريد.');
+            });
+        };
+    </script>
+
+    <!-- سكربتات المنصة الأساسية وجميع قواعد البيانات -->
+    <script src="summaries.js"></script>
+    <script>
+        // ==========================================
+        // قاعدة بيانات المسارات الجامعية
+        // ==========================================
+        const allMajorsData = [
+            { track: 'علمي', title: '🩺 الطب والعلوم الصحية', details: [ { name: 'الطب البشري', unis: 'جامعة السلطان قابوس (SQU)، الجامعة الوطنية، كلية عمان للعلوم الصحية', gpa: '95% وأعلى', reqSubjects: 'الكيمياء، الأحياء، الرياضيات المتقدمة، (الفيزياء يفضل)' }, { name: 'طب وجراحة الأسنان', unis: 'كلية عمان لطب الأسنان، الجامعة الوطنية', gpa: '92% وأعلى', reqSubjects: 'الكيمياء، الأحياء، الرياضيات المتقدمة' }, { name: 'الصيدلة', unis: 'جامعة السلطان قابوس، الجامعة الوطنية، جامعة نزوى', gpa: '88% وأعلى', reqSubjects: 'الكيمياء، الأحياء، الرياضيات المتقدمة' }, { name: 'التمريض', unis: 'جامعة السلطان قابوس، كليات عمان للعلوم الصحية، جامعة نزوى', gpa: '80% وأعلى', reqSubjects: 'الكيمياء، الأحياء' }, { name: 'الأشعة والمختبرات الطبية', unis: 'جامعة السلطان قابوس، كلية عمان للعلوم الصحية', gpa: '85% وأعلى', reqSubjects: 'الكيمياء، الأحياء، الرياضيات المتقدمة' } ] },
+            { track: 'علمي', title: '⚙️ الهندسة والتكنولوجيا', details: [ { name: 'الهندسة المدنية والمعمارية', unis: 'جامعة السلطان قابوس، جامعة التقنية (UTAS)، الجامعة الألمانية', gpa: '80% - 90%', reqSubjects: 'الفيزياء، الرياضيات المتقدمة، الكيمياء' }, { name: 'الهندسة الميكانيكية والكهربائية', unis: 'جامعة السلطان قابوس، جامعة التقنية والعلوم التطبيقية', gpa: '80% - 90%', reqSubjects: 'الفيزياء، الرياضيات المتقدمة، الكيمياء' }, { name: 'هندسة الميكاترونكس', unis: 'جامعة السلطان قابوس، الجامعة الألمانية، جامعة نزوى', gpa: '85% وأعلى', reqSubjects: 'الفيزياء، الرياضيات المتقدمة، الكيمياء' }, { name: 'الهندسة الكيميائية وهندسة البترول', unis: 'جامعة السلطان قابوس، الجامعة الألمانية', gpa: '85% وأعلى', reqSubjects: 'الفيزياء، الكيمياء، الرياضيات المتقدمة' } ] },
+            { track: 'علمي', title: '💻 تقنية المعلومات والحوسبة', details: [ { name: 'علوم الحاسب الآلي', unis: 'جامعة السلطان قابوس، جامعة التقنية (UTAS)، جامعة البريمي', gpa: '75% - 85%', reqSubjects: 'الرياضيات المتقدمة أو الأساسية، تقنية المعلومات' }, { name: 'الذكاء الاصطناعي وعلم البيانات', unis: 'جامعة السلطان قابوس، جامعة التقنية والعلوم التطبيقية', gpa: '80% - 90%', reqSubjects: 'الرياضيات المتقدمة، تقنية المعلومات' }, { name: 'الأمن السيبراني وشبكات الحاسوب', unis: 'جامعة التقنية والعلوم التطبيقية، كلية الشرق الأوسط', gpa: '75% - 85%', reqSubjects: 'الرياضيات، تقنية المعلومات' }, { name: 'هندسة البرمجيات', unis: 'جامعة السلطان قابوس، جامعة ظفار، جامعة صحار', gpa: '75% - 85%', reqSubjects: 'الرياضيات المتقدمة، تقنية المعلومات' } ] },
+            { track: 'علمي', title: '🧪 العلوم الأساسية والتطبيقية', details: [ { name: 'الفيزياء والكيمياء', unis: 'جامعة السلطان قابوس، جامعة التقنية والعلوم التطبيقية', gpa: '75% - 85%', reqSubjects: 'الفيزياء، الكيمياء، الرياضيات المتقدمة' }, { name: 'علوم الأرض (الجيولوجيا)', unis: 'جامعة السلطان قابوس، الجامعة الألمانية', gpa: '75% - 85%', reqSubjects: 'الفيزياء، الكيمياء، الرياضيات المتقدمة' }, { name: 'الرياضيات والإحصاء', unis: 'جامعة السلطان قابوس، جامعة التقنية والعلوم التطبيقية', gpa: '75% - 85%', reqSubjects: 'الرياضيات المتقدمة' }, { name: 'الأحياء والتقنية الحيوية', unis: 'جامعة السلطان قابوس، جامعة التقنية (الرستاق)', gpa: '75% - 85%', reqSubjects: 'الأحياء، الكيمياء' } ] },
+            { track: 'علمي', title: '🌱 العلوم الزراعية والبحرية', details: [ { name: 'العلوم البحرية والسمكية', unis: 'جامعة السلطان قابوس', gpa: '75% - 80%', reqSubjects: 'الأحياء، الكيمياء' }, { name: 'الهندسة الزراعية', unis: 'جامعة السلطان قابوس', gpa: '75% - 80%', reqSubjects: 'الأحياء، الكيمياء، الرياضيات' }, { name: 'علوم الأغذية والتغذية', unis: 'جامعة السلطان قابوس', gpa: '80% - 85%', reqSubjects: 'الأحياء، الكيمياء' } ] },
+            { track: 'أدبي', title: '⚖️ القانون والعلوم الشرعية', details: [ { name: 'القانون العام والقانون الخاص', unis: 'جامعة السلطان قابوس، جامعة البريمي، جامعة ظفار', gpa: '80% - 90%', reqSubjects: 'اللغة العربية، الدراسات الاجتماعية' }, { name: 'الشريعة الإسلامية وأصول الدين', unis: 'كلية العلوم الشرعية، جامعة السلطان قابوس', gpa: '75% - 85%', reqSubjects: 'التربية الإسلامية، اللغة العربية' }, { name: 'الفقه وأصوله', unis: 'كلية العلوم الشرعية', gpa: '75% - 80%', reqSubjects: 'التربية الإسلامية، اللغة العربية' } ] },
+            { track: 'أدبي', title: '💼 الإدارة والعلوم التجارية', details: [ { name: 'إدارة الأعمال', unis: 'جامعة السلطان قابوس، جامعة التقنية (UTAS)، كلية مجان', gpa: '75% - 85%', reqSubjects: 'الرياضيات الأساسية أو المتقدمة، اللغة الإنجليزية' }, { name: 'المحاسبة والمالية', unis: 'جامعة السلطان قابوس، جامعة التقنية (UTAS)، كلية الشرق الأوسط', gpa: '75% - 85%', reqSubjects: 'الرياضيات، اللغة الإنجليزية' }, { name: 'الاقتصاد', unis: 'جامعة السلطان قابوس، جامعة نزوى', gpa: '75% - 85%', reqSubjects: 'الرياضيات، الدراسات الاجتماعية' }, { name: 'التسويق وإدارة الموارد البشرية', unis: 'جامعة التقنية والعلوم التطبيقية، الجامعة العربية المفتوحة', gpa: '70% - 80%', reqSubjects: 'اللغة الإنجليزية' } ] },
+            { track: 'أدبي', title: '🎓 التربية والتعليم', details: [ { name: 'معلم مجال أول ومجال ثاني', unis: 'جامعة السلطان قابوس، جامعة التقنية والعلوم التطبيقية (الرستاق)', gpa: '85% - 95%', reqSubjects: 'اللغة العربية، التربية الإسلامية' }, { name: 'التربية الخاصة ورياض الأطفال', unis: 'جامعة السلطان قابوس، جامعة نزوى', gpa: '80% - 90%', reqSubjects: 'اللغة العربية' }, { name: 'تربية لغة إنجليزية وعربية', unis: 'جامعة السلطان قابوس، جامعة التقنية (الرستاق)، جامعة ظفار', gpa: '85% - 95%', reqSubjects: 'اللغة الإنجليزية، اللغة العربية' } ] },
+            { track: 'أدبي', title: '📖 الآداب والعلوم الإنسانية', details: [ { name: 'اللغة العربية وآدابها', unis: 'جامعة السلطان قابوس، جامعة نزوى', gpa: '75% - 85%', reqSubjects: 'اللغة العربية' }, { name: 'اللغة الإنجليزية والترجمة', unis: 'جامعة السلطان قابوس، جامعة صحار، جامعة البريمي', gpa: '75% - 85%', reqSubjects: 'اللغة الإنجليزية' }, { name: 'التاريخ والجغرافيا', unis: 'جامعة السلطان قابوس', gpa: '75% - 80%', reqSubjects: 'التاريخ، الجغرافيا' }, { name: 'علم الاجتماع وعلم النفس', unis: 'جامعة السلطان قابوس', gpa: '80% - 85%', reqSubjects: 'الدراسات الاجتماعية' } ] },
+            { track: 'أدبي', title: '🎙️ الإعلام والاتصال الجماهيري', details: [ { name: 'الصحافة والنشر الإلكتروني', unis: 'جامعة السلطان قابوس، كلية البيان', gpa: '75% - 85%', reqSubjects: 'اللغة العربية، اللغة الإنجليزية' }, { name: 'العلاقات العامة', unis: 'جامعة السلطان قابوس، كلية البيان، جامعة التقنية (UTAS)', gpa: '75% - 85%', reqSubjects: 'اللغة العربية' }, { name: 'الإذاعة والتلفزيون', unis: 'جامعة السلطان قابوس، كلية البيان', gpa: '75% - 85%', reqSubjects: 'اللغة العربية، اللغة الإنجليزية' } ] },
+            { track: 'أدبي', title: '🎨 الفنون والتصميم', details: [ { name: 'التصميم الجرافيكي', unis: 'الكلية العلمية للتصميم، جامعة التقنية (UTAS)، جامعة السلطان قابوس', gpa: '70% - 85%', reqSubjects: 'الفنون التشكيلية، اللغة الإنجليزية' }, { name: 'التصميم الداخلي (الديكور)', unis: 'الكلية العلمية للتصميم، الجامعة الألمانية، جامعة نزوى', gpa: '70% - 85%', reqSubjects: 'الفنون التشكيلية' }, { name: 'الفنون التشكيلية', unis: 'جامعة السلطان قابوس، الكلية العلمية للتصميم', gpa: '70% - 80%', reqSubjects: 'الفنون التشكيلية' } ] }
+        ];
+
+        // ==========================================
+        // قوائم كلمات اللغة الإنجليزية (مفصولة لكل صف)
+        // ==========================================
+        const engWords9 = [ ['Ability','قدرة'],['Accept','يقبل'],['Advice','نصيحة'],['Agree','يوافق'],['Allow','يسمح'],['Amount','كمية'],['Announce','يعلن'],['Apologize','يعتذر'],['Appear','يظهر'],['Approach','يقترب'] ];
+        const engWords10 = [ ['Benefit','فائدة'],['Brave','شجاع'],['Certain','متأكد'],['Damage','يُتلف'],['Discover','يكتشف'],['Effort','جهد'],['Encourage','يشجع'],['Exactly','بالضبط'],['Familiar','مألوف'],['Generate','يولد/ينتج'] ];
+        const engWords11 = [ ['Acquire','يكتسب'],['Adequate','كافٍ'],['Analyze','يحلل'],['Anticipate','يتوقع'],['Apparent','واضح'],['Assess','يقيّم'],['Attitude','موقف/سلوك'],['Beneficial','مفيد'],['Capable','قادر'],['Category','فئة'] ];
+        const engWords12 = [ ['Cease','يتوقف'],['Coherent','متماسك'],['Coincide','يتزامن'],['Collapse','ينهار'],['Commit','يلتزم'],['Compensate','يعوض'],['Crucial','حاسم'],['Deteriorate','يتدهور'],['Emerge','يبرز'],['Emphasize','يؤكد'] ];
+        
+        
+        window.openIframe = function(title, link, subKey, category) {
+            document.querySelectorAll('.module-view').forEach(el => el.classList.remove('active'));
+            document.getElementById('iframe-view').classList.add('active');
+            window.scrollTo(0,0);
+            
+            // Generate the preview link properly for Google Drive
+            let previewLink = link;
+            if (previewLink.includes('/view')) {
+                previewLink = previewLink.replace('/view', '/preview');
+            } else if (!previewLink.includes('/preview')) {
+                // Just in case
+                previewLink += '/preview';
+            }
+
+            document.getElementById('iframe-title').innerText = title;
+            document.getElementById('file-iframe').src = previewLink;
+            
+            document.getElementById('iframe-back-btn').onclick = () => {
+                document.getElementById('file-iframe').src = ''; // Stop loading
+                showCategoryFiles(subKey, category);
+            };
+            
+            document.getElementById('iframe-external-btn').onclick = () => {
+                window.open(link, '_blank');
+            };
+        }
+
+        function getGradeWordsList() {
+            if (window.studentData.grade.includes('التاسع')) return engWords9;
+            if (window.studentData.grade.includes('العاشر')) return engWords10;
+            if (window.studentData.grade.includes('الحادي عشر')) return engWords11;
+            if (window.studentData.grade.includes('الثاني عشر')) return engWords12;
+            return engWords9; // افتراضي
+        }
+
+        // ==========================================
+        // دوال المنصة الأساسية
+        // ==========================================
+        const $ = (s, r = document) => r.querySelector(s);
+        const L = (k, d) => { try { return JSON.parse(localStorage.getItem('ufq_' + k)) ?? d } catch { return d } };
+        const S = (k, v) => { localStorage.setItem('ufq_' + k, JSON.stringify(v)); if(window.syncToCloud) window.syncToCloud(); };
+        const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        
+        window.studentData = { grade: '', pathway: '', subjects: [], gender: '', name: '', xp: 0, streak: 1, weeklyGoal: '', goalDone: false };
+        let regHistory = ['step-1-grade'];
+
+        // تم تحديث أسماء المواد بـ "الـ" التعريف لتتطابق مع ملف summaries.js
+        const basicGradeSubjects = ['الفيزياء', 'الكيمياء', 'الأحياء', 'اللغة العربية', 'اللغة الإنجليزية', 'التربية الإسلامية', 'الرياضيات', 'الدراسات الاجتماعية', 'المهارات الموسيقية', 'المهارات الحياتية', 'الفنون التشكيلية', 'الرياضة المدرسية', 'تقنية المعلومات'];
+        const scienceSubjects = ['الكيمياء', 'الفيزياء', 'الأحياء', 'الرياضيات المتقدمة', 'اللغة العربية', 'اللغة الإنجليزية', 'التربية الإسلامية', 'هذا وطني', 'تقنية المعلومات', 'المهارات الموسيقية', 'الرياضة المدرسية', 'الفنون التشكيلية'];
+        const artSubjects = ['علوم البيئة', 'اللغة العربية', 'اللغة الإنجليزية', 'الرياضيات الأساسية', 'هذا وطني', 'التاريخ', 'الجغرافيا', 'التربية الإسلامية', 'تقنية المعلومات', 'الفنون التشكيلية', 'المهارات الموسيقية', 'الرياضة المدرسية'];
+        
+        const subjectIcons = { 'التربية الإسلامية': '🕋', 'اللغة العربية': '📖', 'اللغة الإنجليزية': '🔤', 'الرياضيات المتقدمة': '🧮', 'الرياضيات الأساسية': '🔢', 'الرياضيات': '📐', 'الكيمياء': '🧪', 'الفيزياء': '⚡', 'الأحياء': '🧬', 'علوم البيئة': '🌱', 'العلوم': '🔬', 'هذا وطني': '🇴🇲', 'التاريخ': '📜', 'الجغرافيا': '🌍', 'الدراسات الاجتماعية': '🗺️', 'تقنية المعلومات': '💻', 'الفنون التشكيلية': '🎨', 'المهارات الموسيقية': '🎵', 'الرياضة المدرسية': '⚽', 'المهارات الحياتية': '🤝' };
+        
+        // دالة مساعدة لضمان وجود المواد
+        const subs = () => {
+            if (window.studentData && window.studentData.subjects && window.studentData.subjects.length > 0) {
+                return window.studentData.subjects;
+            }
+            return basicGradeSubjects;
+        };
+
+        window.applyTheme = function() {
+          if (window.studentData && window.studentData.gender) {
+              const g = window.studentData.gender;
+              document.body.classList.toggle('theme-pink', g.includes('طالبة') || g.includes('بنات') || g === 'أنثى');
+          }
+      };
+
+        window.onload = () => { initBot(); };
+
+        // ==========================================
+        // المحرك الذكي لعرض الملخصات 📚
+        // ==========================================
+        window.renderSummaries = function() {
+            const container = document.querySelector('#summaries-view #dynamic-study-subjects') || document.getElementById('dynamic-study-subjects');
+            if(!container) return;
+            
+            container.innerHTML = ''; 
+            
+            const db = typeof summariesData !== 'undefined' ? summariesData : (window.summariesData || null);
+            if (!db) {
+                console.error('summariesData is undefined!');
+                container.innerHTML = '<p style="grid-column: 1 / -1; text-align:center; padding:20px; font-weight:bold; color:var(--c);">جاري تحميل الملخصات أو يوجد خطأ في الربط ⏳...</p>';
+                return;
+            }
+
+            let gradeKey = window.studentData.grade || '';
+            if(!db[gradeKey]) {
+                if(gradeKey.includes('عاشر') || gradeKey.includes('10')) gradeKey = 'الصف العاشر';
+                else if(gradeKey.includes('تاسع') || gradeKey.includes('9')) gradeKey = 'الصف التاسع';
+            }
+
+            const gradeData = db[gradeKey];
+            if (!gradeData) {
+                container.innerHTML = '<p style="grid-column: 1 / -1; text-align:center; color:#888; font-weight:bold; padding:20px;">لم يتم إضافة ملخصات لهذا الصف حتى الآن 📚 قريباً!</p>';
+                return;
+            }
+
+            subs().forEach(sub => {
+                const card = document.createElement('div'); card.className = 'glass-box study-card'; card.style.padding = "20px"; card.style.cursor = "pointer"; card.style.textAlign = "center"; card.style.transition = "0.3s";
+                card.onclick = () => showSubjectMaterials(sub);
+                const icon = subjectIcons[sub] || '📔';
+                card.innerHTML = `<div style="font-size:3rem; margin-bottom:10px;">${icon}</div><div style="font-weight:bold; color:var(--c); font-size:1.1rem;">${sub}</div>`;
+                container.appendChild(card);
+            });
+        };
+
+        window.showSubjectMaterials = function(sub) {
+            if (typeof summariesData === 'undefined') return customAlert('ملف الملخصات غير موجود أو به خطأ.');
+            let currentGrade = window.studentData.grade || "الصف التاسع";
+            const db = typeof summariesData !== 'undefined' ? summariesData : (window.summariesData || null);
+            if(!db[currentGrade]) {
+                 if(currentGrade.includes('عاشر') || currentGrade.includes('10')) currentGrade = 'الصف العاشر';
+                 else if(currentGrade.includes('تاسع') || currentGrade.includes('9')) currentGrade = 'الصف التاسع';
+                 else currentGrade = "الصف التاسع";
+            }
+            
+            const gradeData = db[currentGrade];
+            let key = sub;
+            if (!gradeData || !gradeData[key]) {
+                if (gradeData && gradeData["ال" + key]) key = "ال" + key;
+                else if (gradeData && key.startsWith("ال") && gradeData[key.substring(2)]) key = key.substring(2);
+                else if (gradeData && key.includes("إسلامية") && gradeData["التربية الإسلامية"]) key = "التربية الإسلامية";
+            }
+
+            if (!gradeData || !gradeData[key] || Object.keys(gradeData[key]).length === 0) {
+                return customAlert(`جاري تجهيز ملخصات وملازم مادة ${sub} 🚀`, 'قريباً', true);
+            }
+
+            const subData = gradeData[key];
+            
+            document.querySelectorAll('.module-view').forEach(el => el.classList.remove('active'));
+            document.getElementById('subject-categories-view').classList.add('active');
+            window.scrollTo(0,0);
+
+            document.getElementById('cat-view-title').innerText = `📚 مادة ${key}`;
+            
+            let html = `<button class="back-btn" onclick="showModule('summaries-view')" style="margin-bottom:20px; width:100%; justify-content:center;">🔙 رجوع لقائمة المواد</button>`;
+            const catIcons = { "الاختبارات النهائية": "📝", "الاختبارات القصيرة": "⏱️", "الملخصات الشاملة": "📑", "الكتب المدرسية والأدلة": "📖", "المقاطع التعليمية": "🎬" };
+
+            let hasCategories = false;
+            for (const category in subData) {
+                if (subData[category].length > 0) {
+                    hasCategories = true;
+                    const icon = catIcons[category] || "📁";
+                    const count = subData[category].length;
+                    html += `
+                    <div class="category-card" onclick="showCategoryFiles('${key}', '${category}')">
+                        <div class="category-icon">${icon}</div>
+                        <div class="category-info">
+                            <h3>${category}</h3>
+                            <p>${count} ملفات متاحة</p>
+                        </div>
+                        <div class="category-arrow">👈</div>
+                    </div>`;
+                }
+            }
+            
+            if(!hasCategories) {
+                html += '<p style="text-align:center; color:#888; font-weight:bold; padding:20px;">عذراً، لا توجد ملفات متوفرة لهذه المادة حالياً 📭</p>';
+            }
+            
+            document.getElementById('dynamic-categories-container').innerHTML = html;
+        }
+
+        window.showCategoryFiles = function(subKey, category) {
+            if (typeof summariesData === 'undefined') return;
+            let currentGrade = window.studentData.grade || "الصف التاسع";
+            const db = typeof summariesData !== 'undefined' ? summariesData : (window.summariesData || null);
+            if(!db[currentGrade]) {
+                 if(currentGrade.includes('عاشر') || currentGrade.includes('10')) currentGrade = 'الصف العاشر';
+                 else if(currentGrade.includes('تاسع') || currentGrade.includes('9')) currentGrade = 'الصف التاسع';
+                 else currentGrade = "الصف التاسع";
+            }
+            
+            const subData = db[currentGrade][subKey];
+            const files = subData[category] || [];
+
+            document.querySelectorAll('.module-view').forEach(el => el.classList.remove('active'));
+            document.getElementById('subject-files-view').classList.add('active');
+            window.scrollTo(0,0);
+
+            document.getElementById('files-view-title').innerText = `📂 ${category} - ${subKey}`;
+            document.getElementById('back-to-categories-btn').onclick = () => showSubjectMaterials(subKey);
+
+            let html = '';
+            files.forEach(item => {
+                let finalLink = convertDriveLink(item.link);
+                html += `<button onclick="window.openIframe('${item.title}', '${finalLink}', '${subKey}', '${category}')" class="file-card" style="cursor:pointer; width:100%; border:1px solid rgba(0,0,0,0.05); text-align:right;">
+                    <div class="file-icon">📄</div>
+                    <h5 class="file-title" title="${item.title}">${item.title}</h5>
+                    <div class="file-btn">فتح الملف</div>
+                </button>`;
+            });
+            
+            if(files.length === 0) {
+                 html = '<p style="text-align:center; color:#888; font-weight:bold; padding:20px;">لا توجد ملفات في هذا القسم 📭</p>';
+            }
+            
+            document.getElementById('dynamic-files-container').innerHTML = html;
+        }
+
+        function convertDriveLink(url) {
+            if(url && url.includes("drive.google.com/open?id=")) return url.replace("open?id=", "file/d/") + "/view";
+            if(url && url.includes("drive.google.com/file/d/") && !url.includes("/view")) return url + "/view";
+            return url;
+        }
+
+        // ==========================================
+        // دوال سجل درجات الاختبارات 📊
+        // ==========================================
+        window.addGradeRecord = function() {
+            const name = document.getElementById('grd-name').value.trim();
+            const sub = document.getElementById('grd-sub').value;
+            let type = document.getElementById('grd-type').value;
+            if(type === 'custom') type = document.getElementById('grd-type-custom').value.trim();
+            
+            const scoreVal = document.getElementById('grd-score').value;
+            const maxVal = document.getElementById('grd-max').value;
+            const score = parseFloat(scoreVal);
+            const max = parseFloat(maxVal);
+            const date = document.getElementById('grd-date').value;
+
+            if(!name || !type || isNaN(score) || isNaN(max) || !date) {
+                return customAlert('الرجاء تعبئة جميع بيانات الاختبار وتحديد درجاته بدقة 📝', 'تنبيه');
+            }
+            if(score > max) {
+                return customAlert('عذراً يا بطل! لا يمكن أن تكون الدرجة الحاصل عليها أكبر من الدرجة النهائية 😅', 'تنبيه');
+            }
+            if(score < 0 || max <= 0) {
+                return customAlert('الرجاء إدخال درجات صحيحة أكبر من الصفر', 'تنبيه');
+            }
+
+            const grds = L('grds', []);
+            grds.push({ name, sub, type, score, max, date });
+            S('grds', grds);
+
+            // تصفير الحقول لتسهيل إضافة اختبار جديد
+            document.getElementById('grd-name').value = '';
+            document.getElementById('grd-score').value = '';
+            document.getElementById('grd-type').value = 'سؤال قصير';
+            document.getElementById('grd-type').style.display = 'block';
+            document.getElementById('grd-type-custom').style.display = 'none';
+            document.getElementById('grd-type-custom').value = '';
+            document.getElementById('grd-date').value = '';
+            
+            renderGradesRecord();
+            
+            customAlert('تم حفظ درجتك بنجاح! استمر في التميز 🚀', 'إنجاز رائع!', true);
+            if(typeof addXP === 'function') addXP(10, 'إضافة درجة اختبار');
+        }
+
+        window.renderGradesRecord = function() {
+            const grds = L('grds', []);
+            const container = document.getElementById('grades-container');
+            if(!container) return;
+            
+            container.innerHTML = grds.map((g, i) => {
+                const percent = Math.round((g.score / g.max) * 100);
+                let color = percent >= 90 ? '#28a745' : (percent >= 70 ? '#f39c12' : '#dc3545'); 
+                let emoji = percent >= 90 ? '🤩' : (percent >= 70 ? '👍' : '💪');
+                
+                return `<div class="skill-card" style="display:flex; justify-content:space-between; align-items:center; border-right-color:${color}; transition:0.3s;">
+                    <div>
+                        <h4 style="margin:0; color:var(--c); font-size:1.3rem;">${esc(g.sub)}: <span style="color:#222;">${esc(g.name)}</span></h4>
+                        <div style="margin-top:8px; display:flex; gap:8px; align-items:center;">
+                            <span style="font-size:0.85rem; background:rgba(0,0,0,0.05); padding:3px 12px; border-radius:12px; color:#444; font-weight:bold;">📝 ${esc(g.type)}</span>
+                            <span style="font-size:0.85rem; color:#888; font-weight:bold;">📅 ${g.date}</span>
+                        </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:15px;">
+                        <div style="text-align:center; background:rgba(0,0,0,0.02); padding:10px 15px; border-radius:12px; border:1px solid rgba(0,0,0,0.05);">
+                            <div style="font-size:1.6rem; font-weight:900; color:${color}; direction:ltr; line-height:1;">${g.score} <span style="font-size:1rem; color:#999;">/ ${g.max}</span></div>
+                            <div style="font-size:0.85rem; color:${color}; font-weight:bold; margin-top:5px;">${percent}% ${emoji}</div>
+                        </div>
+                        <button onclick="delGradeRecord(${i})" style="background:#ffeeee; border:1px solid #ffcccc; color:#dc3545; width:35px; height:35px; border-radius:10px; cursor:pointer; transition:0.3s; display:flex; justify-content:center; align-items:center;" onmouseover="this.style.background='#ffcccc'" onmouseout="this.style.background='#ffeeee'">🗑️</button>
+                    </div>
+                </div>`;
+            }).join('') || '<p style="grid-column:1/-1; text-align:center; color:#888; font-weight:bold; padding:20px;">لم تتم إضافة درجات بعد. أضف درجاتك هنا لتتمكن من متابعة مستواك! 📊</p>';
+        }
+
+        window.delGradeRecord = function(idx) {
+            const grds = L('grds', []);
+            grds.splice(idx, 1);
+            S('grds', grds);
+            renderGradesRecord();
+        }
+
+        // ==========================================
+        // دوال شاشات التسجيل (Onboarding)
+        // ==========================================
+        function showStep(stepId) {
+            ['step-1-grade', 'step-pathway', 'step-subjects', 'step-2-gender', 'step-3-name'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(stepId).classList.remove('hidden');
+            
+            if (regHistory.length > 1) {
+                document.getElementById('reg-back-btn').classList.remove('hidden');
+            } else {
+                document.getElementById('reg-back-btn').classList.add('hidden');
+            }
+        }
+
+        window.regGoBack = function() {
+            if (regHistory.length > 1) {
+                regHistory.pop();
+                showStep(regHistory[regHistory.length - 1]);
+            }
+        }
+
+        document.querySelectorAll('.grade-btn').forEach(btn => {
+            btn.onclick = function() {
+                window.studentData.grade = this.innerText;
+                if (window.studentData.grade.includes('الحادي عشر') || window.studentData.grade.includes('الثاني عشر')) {
+                    regHistory.push('step-pathway');
+                    showStep('step-pathway');
+                } else {
+                    window.studentData.subjects = basicGradeSubjects;
+                    regHistory.push('step-2-gender');
+                    showStep('step-2-gender');
+                }
+            };
+        });
+
+        document.querySelectorAll('.pathway-btn').forEach(btn => {
+            btn.onclick = function() {
+                window.studentData.pathway = this.innerText;
+                window.studentData.subjects = [];
+                renderSubjectSelection();
+                regHistory.push('step-subjects');
+                showStep('step-subjects');
+            };
+        });
+
+        function renderSubjectSelection() {
+            const grid = document.getElementById('subjects-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            const allSubs = window.studentData.pathway.includes('علمي') ? scienceSubjects : artSubjects;
+            
+            allSubs.forEach(sub => {
+                const btn = document.createElement('button');
+                btn.className = 'step-btn subject-btn';
+                btn.innerText = sub;
+                btn.onclick = function() {
+                    if (this.classList.contains('selected-subject')) {
+                        this.classList.remove('selected-subject');
+                        window.studentData.subjects = window.studentData.subjects.filter(s => s !== sub);
+                    } else {
+                        if (window.studentData.subjects.length >= 8) return customAlert('لقد اخترت 8 مواد بالفعل!');
+                        this.classList.add('selected-subject');
+                        window.studentData.subjects.push(sub);
+                    }
+                    document.getElementById('subjects-counter').innerText = `تم اختيار ${window.studentData.subjects.length} من 8 مواد`;
+                    document.getElementById('confirm-subjects-btn').disabled = window.studentData.subjects.length !== 8;
+                };
+                grid.appendChild(btn);
+            });
+            document.getElementById('subjects-counter').innerText = `تم اختيار 0 من 8 مواد`;
+            document.getElementById('confirm-subjects-btn').disabled = true;
+        }
+
+        const confirmSubsBtn = document.getElementById('confirm-subjects-btn');
+        if(confirmSubsBtn) {
+            confirmSubsBtn.onclick = function() {
+                regHistory.push('step-2-gender');
+                showStep('step-2-gender');
+            };
+        }
+
+        document.querySelectorAll('.gender-btn').forEach(btn => {
+          btn.onclick = function() {
+              window.studentData.gender = this.innerText;
+              window.applyTheme();
+              regHistory.push('step-3-name');
+              showStep('step-3-name');
+          };
+      });
+
+      const startBtn = document.getElementById('start-btn');
+        if(startBtn) {
+            startBtn.onclick = function() {
+                const name = document.getElementById('student-name').value.trim();
+                if (!name) return customAlert('الرجاء كتابة اسمك للمتابعة');
+                window.studentData.name = name;
+                
+                localStorage.setItem('ufuqStudentData', JSON.stringify(window.studentData));
+                
+                document.getElementById('welcome-screen').classList.add('hidden');
+                document.getElementById('main-dashboard').classList.remove('hidden');
+                
+                window.applyTheme();
+                window.initModules();
+                window.updateDashboardWidget();
+
+                // المزامنة السحابية تعمل بالخلفية بدون تأخير فتح الصفحة
+                if(window.syncToCloud) window.syncToCloud();
+            };
+        }
+
+        // ==========================================
+        // دوال نظام النقاط (XP) وأهداف الأسبوع
+        // ==========================================
+        window.openGoalModal = function() {
+            if (window.studentData.goalDone) return customAlert('لقد أنجزت هدف هذا الأسبوع مسبقاً! بانتظار أسبوع جديد 🌟');
+            document.getElementById('goal-input').value = window.studentData.weeklyGoal || '';
+            openModal('goal-modal');
+        }
+
+        window.saveWeeklyGoal = function() {
+            const goal = document.getElementById('goal-input').value.trim();
+            if(!goal) return customAlert('الرجاء كتابة الهدف أولاً!');
+            
+            window.studentData.weeklyGoal = goal;
+            window.studentData.goalDone = false;
+            localStorage.setItem('ufuqStudentData', JSON.stringify(window.studentData));
+            if(window.syncToCloud) window.syncToCloud();
+            
+            closeModal('goal-modal');
+            window.updateDashboardWidget();
+            customAlert('تم حفظ هدفك بنجاح! انطلق لتحقيقه 🚀', 'رائع!', true);
+        }
+
+        window.completeWeeklyGoal = function() {
+            if (window.studentData.goalDone) return;
+            window.studentData.goalDone = true;
+            localStorage.setItem('ufuqStudentData', JSON.stringify(window.studentData));
+            if(window.syncToCloud) window.syncToCloud();
+            
+            addXP(100, 'أنجزت هدف الأسبوع! 🎯');
+            window.updateDashboardWidget();
+        }
+
+        window.completeWeeklyPlan = function() {
+            addXP(50, 'أنهيت خطة المذاكرة الأسبوعية! 📅');
+        }
+
+        window.addXP = function(amount, msg) {
+            window.studentData.xp = (window.studentData.xp || 0) + amount;
+            localStorage.setItem('ufuqStudentData', JSON.stringify(window.studentData));
+            if(window.syncToCloud) window.syncToCloud();
+            window.updateDashboardWidget();
+            customAlert(`كفو يا بطل! تم إضافة ${amount} نقطة لحسابك.
+${msg}`, 'إنجاز رائع! 🌟', true);
+        }
+
+        // ==========================================
+        // تحديث لوحة الطالب وعرض الهدف والصور
+        // ==========================================
+        window.updateDashboardWidget = function() {
+            const nameEl = document.getElementById('dash-name');
+            if (nameEl) nameEl.innerText = window.studentData.name || 'يا بطل';
+            
+            const gradeEl = document.getElementById('dash-grade');
+            if (gradeEl) gradeEl.innerText = window.studentData.grade || '';
+
+            const avatarEl = document.getElementById('dashboard-avatar');
+          if (avatarEl) {
+              const g = window.studentData.gender || '';
+              if (g.includes('طالبة') || g.includes('بنات') || g === 'أنثى') {
+                  avatarEl.src = 'Gemini_Generated_Image_16hbfu16hbfu16hb.jfif'; 
+              } else {
+                  avatarEl.src = 'Gemini1_Generated_Image_16hbfu16hbfu16hb (1).jfif'; 
+              }
+          }
+
+            const xpEl = document.getElementById('dash-xp');
+            if (xpEl) xpEl.innerText = window.studentData.xp || 0;
+            
+            const levelEl = document.getElementById('dash-level');
+            const currentLevel = Math.floor((window.studentData.xp || 0) / 100) + 1;
+            if (levelEl) levelEl.innerText = currentLevel;
+
+            const xpBar = document.getElementById('dash-xp-bar');
+            if (xpBar) xpBar.style.width = ((window.studentData.xp || 0) % 100) + '%';
+            
+            // تحديث نص الهدف وظهور زر الإنجاز
+            const goalText = document.getElementById('dash-goal-text');
+            const goalBtn = document.getElementById('dash-goal-btn');
+            if (goalText) {
+                if (window.studentData.goalDone) {
+                    goalText.innerText = 'تم الإنجاز ✅';
+                    goalText.style.color = '#28a745';
+                    if (goalBtn) goalBtn.style.display = 'none';
+                } else if (window.studentData.weeklyGoal) {
+                    goalText.innerText = window.studentData.weeklyGoal;
+                    goalText.style.color = 'var(--c)';
+                    if (goalBtn) goalBtn.style.display = 'block';
+                } else {
+                    goalText.innerText = 'حدد هدفك';
+                    goalText.style.color = 'var(--c)';
+                    if (goalBtn) goalBtn.style.display = 'none';
+                }
+            }
+        };
+
+        window.openModal = function(id) { document.getElementById(id).classList.add('active'); }
+        window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
+
+        window.customAlert = function(msg, title = 'تنبيه ⚠️', isSuccess = false) {
+            $('#alert-message').innerText = msg;
+            const titleEl = $('#alert-title');
+            titleEl.innerText = title;
+            titleEl.style.color = isSuccess ? '#28a745' : (title.includes('رائع') || title.includes('قريباً') ? 'var(--c)' : '#dc3545');
+            openModal('alert-modal');
+        }
+        window.forceLogout = function() {
+            // 1. مسح بيانات الجلسة من المتصفح فوراً
+            localStorage.clear();
+            sessionStorage.clear();
+
+            // 2. تسجيل الخروج من حساب Firebase في الخلفية إن وجد
+            if (window.firebaseSignOut) {
+                window.firebaseSignOut();
+            }
+
+            // 3. إخفاء لوحة التحكم وإظهار شاشة تسجيل الدخول فوراً ثم تحديث الصفحة
+            document.getElementById('main-dashboard').classList.add('hidden');
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('auth-screen').classList.remove('hidden');
+            setTimeout(() => location.reload(), 150);
+        };
+        window.closeModule = function() {
+            document.querySelectorAll('.module-view').forEach(el => el.classList.remove('active'));
+            document.getElementById('main-dashboard').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        window.showModule = function(id) {
+            document.querySelectorAll('.module-view').forEach(el => el.classList.remove('active'));
+            document.getElementById('main-dashboard').classList.add('hidden');
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        
+        window.populateSelects = function() {
+            const subsList = subs();
+            const selects = ['task-sub', 'plan-sub', 'exam-sub', 'grd-sub'];
+            selects.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.innerHTML = subsList.map(s => `<option value="${s}">${s}</option>`).join('');
+                }
+            });
+        };
+
+        window.initModules = function() {
+            populateSelects();
+            renderPathways();
+            renderSummaries();
+            renderList('tasks-list', 'tasks-list-container', t => `<div style="flex:1;"><span class="task-title" style="font-weight:bold; font-size:1.1rem; display:block;">${esc(t.title)}</span><span style="font-size:0.9rem; color:#666;">${esc(t.sub)}</span></div>`);
+            renderList('plans-list', 'plans-list-container', t => `<div style="flex:1;"><span class="task-title" style="font-weight:bold; font-size:1.1rem; display:block;">${esc(t.goal)}</span><span style="font-size:0.9rem; color:#666;">${esc(t.sub)} | ${t.date} ${t.rep?'🔁':''}</span></div>`);
+            initGPA();
+            initTimetable();
+            renderExams();
+            initEnglish();
+            renderGradesRecord();
+            renderPosts('disc', 'disc-list', p => `<strong style="display:block; margin-bottom:5px; color:var(--c); font-size:1.1rem;">${esc(p.title)}</strong><p style="font-size:0.95rem; color:#444;">${esc(p.body)}</p>`);
+            renderPosts('sug', 'sug-list', p => `<p style="font-size:0.95rem; color:#444;">${esc(p.body)}</p>`);
+        }
+
+        function renderPathways() {
+            const gridElem = document.getElementById('dynamic-majors-grid'); 
+            if(!gridElem) return;
+            gridElem.innerHTML = ''; 
+            const gradeStr = window.studentData.grade || ''; const pathStr = window.studentData.pathway || ''; let filteredMajors = (gradeStr.includes('التاسع') || gradeStr.includes('العاشر')) ? allMajorsData : allMajorsData.filter(m => m.track === (pathStr.includes('علمي')?'علمي':'أدبي'));
+            filteredMajors.forEach(major => {
+                const card = document.createElement('div'); card.className = 'major-card';
+                card.onclick = function() { this.classList.toggle('expanded'); };
+                card.innerHTML = `
+                    <div class="major-card-header"><h4>${major.title}</h4><span class="dropdown-icon">▼</span></div>
+                    <div class="major-details-container">${major.details.map(det => `
+                        <div class="item-row" style="display:block; text-align:right;">
+                            <h5 style="color:var(--c); margin-bottom:5px;">${det.name}</h5>
+                            <p style="font-size:0.9rem;"><strong>الجامعات:</strong> ${det.unis}</p>
+                            <p style="font-size:0.9rem; margin-top:5px; color:#c2a077;"><strong>المواد المطلوبة:</strong> ${det.reqSubjects}</p>
+                            <p style="font-size:0.9rem; margin-top:5px;"><strong>المعدل المتوقع:</strong> <span class="badge">${det.gpa}</span></p>
+                        </div>`).join('')}
+                    </div>`;
+                gridElem.appendChild(card);
+            });
+        }
+
+        function getDailyWords() {
+            const list = getGradeWordsList();
+            const seed = Math.floor(Date.now() / 864e5);
+            let today = [];
+            const count = Math.min(8, list.length); 
+            for(let i=0; i<count; i++) today.push(list[(seed + i) % list.length]);
+            return today;
+        }
+
+        function initEnglish() {
+            const mw = L('mw', []), words = getDailyWords();
+            const ewg = $('#eng-words-grid'); if(!ewg) return;
+            ewg.innerHTML = words.map(w => {
+                const isDone = mw.includes(w[0]);
+                return `<div class="word-card ${isDone?'done':''}">
+                    <div class="word-eng">${w[0]}</div><div class="word-ar">${w[1]}</div>
+                    <button class="btn-main" style="width:100%; padding:5px; font-size:0.9rem; background:${isDone?'#28a745':''}" onclick="S('mw',[...L('mw',[]),'${w[0]}']); initEnglish();">${isDone?'حفظتها ✅':'✔️ ضع علامة حفظ'}</button>
+                </div>`;
+            }).join('');
+        }
+
+        window.startEnglishQuiz = function() {
+            document.querySelectorAll('.module-view').forEach(el => el.classList.remove('active'));
+            document.getElementById('english-quiz-view').classList.add('active');
+            window.scrollTo(0,0);
+
+            const container = $('#quiz-full-container'); 
+            const words = getDailyWords();
+            const fullList = getGradeWordsList();
+            const grammar = [
+                {q:"He usually ___ coffee in the morning.", o:["drink","drinks","drinking"], a:"drinks"},
+                {q:"They ___ playing football yesterday.", o:["were","was","are"], a:"were"},
+                {q:"I have ___ apple in my bag.", o:["a","an","the"], a:"an"},
+                {q:"She is the ___ girl in our class.", o:["tall","taller","tallest"], a:"tallest"},
+                {q:"If it rains, we ___ stay home.", o:["will","did","are"], a:"will"},
+                {q:"Listen! The birds ___ singing.", o:["is","are","was"], a:"are"},
+                {q:"I ___ already finished my homework.", o:["has","have","having"], a:"have"}
+            ];
+            const sh = a => [...a].sort(() => Math.random() - .5);
+            
+            let qs = words.map(w => ({ 
+                q:`ما معنى كلمة "${w[0]}"؟`, 
+                o:sh([w[1], ...sh(fullList.filter(x=>x[0]!=w[0])).slice(0,3).map(x=>x[1])]), 
+                a:w[1] 
+            }));
+            qs = sh([...qs, ...grammar]);
+            
+            container.innerHTML = `<div style="text-align:right;">${qs.map((q,i) => `<div style="margin-bottom:15px; padding-bottom:10px; border-bottom:1px solid rgba(0,0,0,0.05);"><div style="font-weight:bold; font-size:1.1rem; margin-bottom:10px; direction:ltr; text-align:left;">${i+1}.${esc(q.q)}</div><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; direction:ltr;">${q.o.map(o => `<label style="background:#f9f9f9; padding:8px; border-radius:8px; border:1px solid #ddd; cursor:pointer; font-weight:bold;"><input type="radio" name="q${i}" value="${esc(o)}"> ${esc(o)}</label>`).join('')}</div></div>`).join('')}<button class="btn-main" id="qz-sb" style="width:100%; margin-top:15px; font-size:1.2rem;">تصحيح الاختبار</button><div id="qz-rs" style="margin-top:20px; font-size:1.4rem; font-weight:bold;"></div></div>`;
+            
+            $('#qz-sb', container).onclick = () => {
+                let s = 0;
+                qs.forEach((q,i) => { const c = container.querySelector(`[name=q${i}]:checked`); if(c && c.value == q.a) s++; });
+                $('#qz-rs', container).innerHTML = `<div style="color:${s>=10?'#28a745':'#dc3545'}; text-align:center; padding:20px; border:2px solid currentColor; border-radius:15px;">نتيجتك: ${s} من 15<br>${s>=10?'أداء ممتاز يا بطل! 🎉':'حاول مراجعة الكلمات والقواعد مرة أخرى 💪'}</div>`;
+                if(s >= 8) { addXP(15, 'أنهيت اختبار الإنجليزية بنجاح! 📝'); }
+            };
+        }
+
+        window.addListItem = function(key, prefix) {
+            const data = {};
+            if(prefix === 'task') {
+                data.title = $('#task-name').value.trim(); data.sub = $('#task-sub').value;
+                if(!data.title) return customAlert('الرجاء كتابة اسم المهمة أو الواجب'); $('#task-name').value='';
+            } else {
+                data.goal = $('#plan-goal').value.trim(); data.sub = $('#plan-sub').value;
+                data.date = $('#plan-date').value; data.rep = $('#plan-rep').checked;
+                if(!data.goal || !data.date) return customAlert('الرجاء إكمال بيانات الخطة (الهدف والتاريخ)'); $('#plan-goal').value='';
+            }
+            data.done = false;
+            const items = L(key, []); items.unshift(data); S(key, items); window.initModules();
+        }
+
+        function renderList(key, containerId, formatHtml) {
+            const items = L(key, []);
+            const container = document.getElementById(containerId);
+            if(!container) return;
+            container.innerHTML = items.map((it, i) => `
+                <div class="item-row ${it.done?'done':''}">
+                    ${formatHtml(it)}
+                    <div style="display:flex; gap:10px;">
+                        <button onclick="toggleDone('${key}', ${i})" class="btn-main" style="padding:5px 12px; font-size:0.9rem; background:${it.done?'#888':'#28a745'};">${it.done?'تراجع':'✔️ إنجاز'}</button>
+                        <button onclick="delItem('${key}', ${i})" style="background:#ffeeee; border:1px solid #ffcccc; color:#dc3545; padding:5px 10px; border-radius:8px; cursor:pointer;">🗑️</button>
+                    </div>
+                </div>`).join('') || '<p style="text-align:center; color:#888;">لا يوجد عناصر مضافة.</p>';
+        }
+
+        window.toggleDone = function(key, idx) { const items = L(key, []); items[idx].done = !items[idx].done; if(items[idx].done) { addXP(10, 'أنجزت مهمة بنجاح! ✅'); } S(key, items); window.initModules(); }
+        window.delItem = function(key, idx) { const items = L(key, []); items.splice(idx, 1); S(key, items); window.initModules(); }
+
+        function initGPA() {
+            const p = $('#gpa-inputs'); if(!p) return; p.innerHTML = '';
+            subs().forEach((s,i) => {
+                p.innerHTML += `<div style="background:#fff; border:1px solid #eee; padding:10px; border-radius:10px; display:flex; align-items:center; gap:10px;">
+                    <b style="flex:1; font-size:0.9rem; color:var(--c); text-align:right;">${s}</b>
+                    <input type="number" min="0" max="100" class="custom-input gpa-val" style="margin:0; width:70px; padding:6px; text-align:center;" placeholder="الدرجة">
+                </div>`;
+            });
+        }
+        window.calcGPA = function() {
+            let t=0, c=0;
+            document.querySelectorAll('.gpa-val').forEach(inp => { const v = parseFloat(inp.value); if(!isNaN(v)){ t+=v; c++; } });
+            $('#gpa-result').innerHTML = c ? `${(t/c).toFixed(2)}%` : 'أدخل الدرجات أولاً';
+        }
+
+        function initTimetable() {
+            const D = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس'];
+            const t = (() => { try { return JSON.parse(localStorage.getItem('ttab')) || {}; } catch { return {}; } })();
+            const op = ['–', ...subs()];
+            const tt = $('#timetable'); if(!tt) return;
+            tt.innerHTML = `<tr><th style="padding:10px; color:var(--c);">الحصة</th>${D.map(d=>`<th style="padding:10px; color:var(--c);">${d}</th>`).join('')}</tr>` + 
+                [1,2,3,4,5,6,7,8].map(r => `<tr><td style="background:rgba(0,0,0,0.05); font-weight:bold; color:var(--c); border-radius:8px; text-align:center;">${r}</td>${D.map((d,c)=>`<td><select onchange="saveTtab('${c}-${r}', this.value)" style="width:100%; padding:8px; border-radius:8px; border:1px solid #ddd; outline:none;" class="${t[c+'-'+r]&&t[c+'-'+r]!='–'?'f':''}">${op.map(o=>`<option ${t[c+'-'+r]==o?'selected':''}>${o}</option>`).join('')}</select></td>`).join('')}</tr>`).join('');
+            
+            document.querySelectorAll('#timetable select').forEach(s => {
+                if(s.value !== '–') { s.style.background = window.studentData.gender === 'أنثى' ? '#c2a077' : 'var(--c)'; s.style.color = '#fff'; s.style.border = 'none'; }
+            });
+        }
+        window.saveTtab = function(k, v) { const t = (() => { try { return JSON.parse(localStorage.getItem('ttab')) || {}; } catch { return {}; } })(); t[k] = v; localStorage.setItem('ttab', JSON.stringify(t)); if(window.syncToCloud) window.syncToCloud(); initTimetable(); }
+
+        window.addExam = function() {
+            const data = { name: $('#exam-name').value.trim(), sub: $('#exam-sub').value, date: $('#exam-date').value, lessons: [] };
+            if(!data.name || !data.date) return customAlert('الرجاء إكمال بيانات الاختبار والموعد');
+            const ex = L('ex', []); ex.push(data); S('ex', ex); $('#exam-name').value=''; window.initModules();
+        }
+
+        function renderExams() {
+            const ex = L('ex', []);
+            const exc = $('#exams-container'); if(exc) exc.innerHTML = ex.map((e,i) => `<div class="skill-card" style="display:flex; justify-content:space-between; align-items:center;">
+                <div><h4 style="margin:0;">${esc(e.sub)}: ${esc(e.name)}</h4><span style="font-size:0.9rem; color:#666;">${e.date}</span></div>
+                <button onclick="delItem('ex', ${i})" style="background:none; border:none; cursor:pointer; color:#dc3545; font-size:1.2rem;">🗑️</button>
+            </div>`).join('') || '<p style="grid-column:1/-1; text-align:center; color:#888;">لم تتم إضافة مواعيد.</p>';
+            
+            const rpc = $('#review-plans-container'); if(rpc) rpc.innerHTML = ex.map((e,i) => `<div class="skill-card" style="border-right:none; border-top:5px solid var(--c);">
+                <h4>${esc(e.sub)}: ${esc(e.name)}</h4>
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
+                    <input type="text" id="lesson-inp-${i}" class="custom-input" style="margin:0; padding:8px;" placeholder="أضف درس للمراجعة...">
+                    <button class="btn-main" style="padding:8px 15px;" onclick="addLesson(${i})">إضافة</button>
+                </div>
+                <div>${(e.lessons||[]).map((l,j) => `<div class="item-row ${l.done?'done':''}" style="padding:8px 12px; margin-bottom:8px;"><span class="task-title" style="font-weight:bold;">${esc(l.name)}</span><div><button onclick="toggleLesson(${i},${j})" style="background:none;border:none;cursor:pointer; font-size:1.1rem;">${l.done?'🔄':'✔️'}</button> <button onclick="delLesson(${i},${j})" style="background:none;border:none;cursor:pointer;color:#dc3545;font-size:1.1rem;">🗑️</button></div></div>`).join('')}</div>
+            </div>`).join('') || '<p style="grid-column:1/-1; text-align:center; color:#888;">أضف اختباراً لتظهر خطة المراجعة.</p>';
+        }
+        window.addLesson = function(i) { const ex=L('ex',[]); const v=$(`#lesson-inp-${i}`).value.trim(); if(v){ ex[i].lessons=ex[i].lessons||[]; ex[i].lessons.push({name:v, done:false}); S('ex',ex); renderExams(); } }
+        window.toggleLesson = function(i,j) { const ex=L('ex',[]); ex[i].lessons[j].done = !ex[i].lessons[j].done; if(ex[i].lessons[j].done) addXP(10, 'راجعت درس بنجاح! 📖'); S('ex',ex); renderExams(); }
+        window.delLesson = function(i,j) { const ex=L('ex',[]); ex[i].lessons.splice(j,1); S('ex',ex); renderExams(); }
+
+        window.addPost = function(key) {
+            const data = { body: $(`#${key}-body`).value.trim() };
+            if(key === 'disc') data.title = $('#disc-title').value.trim();
+            if(!data.body || (key==='disc' && !data.title)) return customAlert('الرجاء إكمال جميع الحقول قبل النشر');
+            const items = L(key, []); items.unshift(data); S(key, items);
+            $(`#${key}-body`).value = ''; if(key==='disc') $('#disc-title').value = '';
+            window.initModules();
+        }
+        function renderPosts(key, containerId, format) {
+            const items = L(key, []);
+            const cont = $(`#${containerId}`); if(!cont) return;
+            cont.innerHTML = items.map(p => `<div class="item-row" style="display:block; text-align:right;">${format(p)}</div>`).join('') || '<p style="text-align:center; color:#888;">كن أول من يشارك!</p>';
+        }
+        const techCoursesCatalog = {
+            cyber: {
+                title: "🛡️ دورة الأمن السيبراني وحماية المعلومات",
+                desc: "تأخذك هذه الدورة لفهم أساسيات أمن المعلومات، التشفير، وحماية الحسابات بالمصادقة الثنائية وكشف طرق الاختراق.",
+                lessons: [
+                    {
+                        title: "📌 الدرس 1: مثلث الحماية السيبرانية (CIA Triad)",
+                        content: `<b>ما هو مثلث الحماية؟</b><br>
+                        هو الأساس الذي يبنى عليه أمن المعلومات في أي نظام في العالم، ويتكون من 3 أضلاع رئيسية:<br><br>
+                        <b>1. السرية (Confidentiality):</b><br>
+                        تعني أن المعلومات لا يراها ولا يصل إليها إلا الأشخاص المصرح لهم فقط. ويتم تحقيق ذلك عبر "التشفير" (Encryption) واستخدام كلمات المرور القوية.<br><br>
+                        <b>2. السلامة (Integrity):</b><br>
+                        تعني أن البيانات دقيقة وصحيحة ولم يتم التلاعب بها أو تغييرها أثناء النقل من المرسل إلى المستقبل. يتم ضمان ذلك عبر تقنيات مثل "التجزئة" (Hashing).<br><br>
+                        <b>3. التوافر (Availability):</b><br>
+                        يعني أن النظام يجب أن يكون متاحاً للمستخدمين الشرعيين في أي وقت يحتاجونه. ويتم حمايته من هجمات حجب الخدمة (DDoS) باستخدام خوادم احتياطية وتحديثات مستمرة.`
+                    },
+                    {
+                        title: "📌 الدرس 2: كلمات المرور والمصادقة الثنائية (2FA)",
+                        content: `<b>كيف تحمي حساباتك من الاختراق الفعلي؟</b><br><br>
+                        <b>1. قوة كلمة المرور:</b><br>
+                        الهاكرز يستخدمون برامج لتجربة ملايين الكلمات في الثانية (هجوم القوة الغاشمة Brute Force). لذلك يجب أن تكون كلمة مرورك تتجاوز 12 حرفاً، وتحتوي على (أرقام، رموز @#$، وحروف كبيرة وصغيرة). لا تستخدم اسمك أو تاريخ ميلادك أبداً.<br><br>
+                        <b>2. المصادقة الثنائية (2FA):</b><br>
+                        هي خط الدفاع الثاني والأهم. حتى لو تمكن الهاكر من معرفة كلمة مرورك، لن يستطيع الدخول لأنه يحتاج للرمز المؤقت (OTP) الذي يتغير كل 30 ثانية بجوالك. <br>
+                        <i>نصيحة:</i> استخدم تطبيقات المصادقة مثل (Google Authenticator) فهي أكثر أماناً من رسائل الـ SMS التي يمكن اعتراضها بسهولة.`
+                    },
+                    {
+                        title: "📌 الدرس 3: كشف التصيد الاحتيالي (Phishing)",
+                        content: `<b>ما هو التصيد الاحتيالي (Phishing)؟</b><br>
+                        هو محاولة خداعك لتعطي بياناتك السرية (مثل رقم بطاقتك البنكية أو رمز الدخول) طواعية، عبر انتحال شخصية جهة موثوقة (مثل بنكك، شركة البريد، أو حتى منصة أُفُق الفاروق).<br><br>
+                        <b>كيف تكتشف الروابط الخبيثة؟</b><br>
+                        - <b>افحص المرسل الحقيقي:</b> انظر إلى الإيميل الفعلي للمرسل وليس اسمه الظاهر فقط.<br>
+                        - <b>ابحث عن القفل وبروتوكول HTTPS:</b> تأكد أن الرابط يبدأ بـ HTTPS وليس HTTP، حرف S يعني Secure (مشفر).<br>
+                        - <b>احذر من أسلوب التخويف والسرعة:</b> رسائل الاحتيال دائماً تطلب منك التصرف بسرعة وبدون تفكير (مثلاً: سيتم إغلاق حسابك بعد 24 ساعة إذا لم تضغط هنا وتحدث بياناتك).`
+                    }
+                ],
+                videos: [
+                    { title: "1. مدخل شامل إلى الأمن السيبراني للمبتدئين", url: "https://www.youtube.com/embed/inWWhr5tnEA" },
+                    { title: "2. كيف يعمل التشفير وحماية الشبكات والبيانات", url: "https://www.youtube.com/embed/bPVaOlJ6ln0" }
+                ]
+            },
+            python: {
+                title: "🐍 دورة تعلم لغة بايثون (Python) من الصفر",
+                desc: "تعلم كتابة الأكواد البرمجية بلغة Python الأكثر طلباً في سوق الذكاء الاصطناعي وتطوير الأنظمة.",
+                lessons: [
+                    {
+                        title: "📌 الدرس 1: المتغيرات وأنواع البيانات",
+                        content: `<b>ما هي المتغيرات (Variables)؟</b><br>
+                        تخيل المتغير كصندوق فارغ في الذاكرة نضع فيه البيانات لنستخدمها لاحقاً. في بايثون، لا تحتاج لتعريف نوع الصندوق قبل استخدامه، اللغة تفهم ذلك تلقائياً من المحتوى!<br><br>
+                        <b>أنواع البيانات الأساسية:</b><br>
+                        - <b>النصوص (Strings):</b> توضع دائماً بين علامتي تنصيص. مثال: <code>name = "Ali"</code><br>
+                        - <b>الأرقام الصحيحة (Integers):</b> أرقام بدون فواصل. مثال: <code>age = 16</code><br>
+                        - <b>الأرقام العشرية (Floats):</b> أرقام بكسور. مثال: <code>degree = 99.5</code><br>
+                        - <b>المنطقية (Booleans):</b> تقبل إحدى قيمتين فقط: صح (True) أو خطأ (False).<br><br>
+                        <b>دالة الطباعة (print):</b> تستخدم لإرسال وعرض النتائج على شاشة المستخدم. مثال: <code>print(name)</code> سيعرض كلمة Ali.`
+                    },
+                    {
+                        title: "📌 الدرس 2: الجمل الشرطية (اتخاذ القرار)",
+                        content: `<b>كيف نجعل البرنامج يفكر ويتخذ قرارات؟</b><br>
+                        عن طريق الجمل الشرطية (if, elif, else) يمكننا توجيه البرنامج لتنفيذ أوامر مختلفة بناءً على المعطيات.<br><br>
+                        <b>الهيكل الأساسي للشرط:</b><br>
+                        <div style="direction:ltr; background:#f4f4f4; padding:10px; border-radius:8px; margin:10px 0;">
+                        <code>if score >= 90:</code><br>
+                        <code>&nbsp;&nbsp;&nbsp;&nbsp;print("ممتاز")</code><br>
+                        <code>elif score >= 80:</code><br>
+                        <code>&nbsp;&nbsp;&nbsp;&nbsp;print("جيد جداً")</code><br>
+                        <code>else:</code><br>
+                        <code>&nbsp;&nbsp;&nbsp;&nbsp;print("حاول مرة أخرى")</code>
+                        </div><br>
+                        <b>معاملات المقارنة الهامة:</b><br>
+                        (==) تستخدم للمساواة والتحقق، (!=) تعني لا يساوي، (>) أكبر من، (<) أصغر من.<br>
+                        <span style="color:red; font-weight:bold;">ملاحظة هامة جداً:</span> المسافات البادئة (Indentation) في بداية الأسطر في بايثون ليست للزينة، بل هي ضرورية لتشغيل الكود وبدونها سيظهر لك خطأ!`
+                    },
+                    {
+                        title: "📌 الدرس 3: الحلقات التكرارية (Loops) والدوال",
+                        content: `<b>الحلقات التكرارية (Loops):</b><br>
+                        تستخدم لتكرار الأوامر عشرات أو آلاف المرات بكتابة كود قصير جداً.<br>
+                        - <b>حلقة For:</b> لتكرار الكود بعدد محدد من المرات أو للمرور على عناصر قائمة. (مثال: <code>for i in range(5):</code> سيكرر الأمر 5 مرات).<br>
+                        - <b>حلقة While:</b> تستمر في التكرار طالما أن الشرط صحيح (True) ولا تتوقف إلا إذا أصبح خاطئاً.<br><br>
+                        <b>الدوال (Functions):</b><br>
+                        الدالة هي أشبه بـ "مصنع صغير" تبنيه داخل كودك ليقوم بمهمة محددة. نستخدم كلمة <code>def</code> لإنشائها:<br>
+                        <div style="direction:ltr; background:#f4f4f4; padding:10px; border-radius:8px; margin:10px 0;">
+                        <code>def greet(name):</code><br>
+                        <code>&nbsp;&nbsp;&nbsp;&nbsp;return "Hello " + name</code>
+                        </div>
+                        بهذه الطريقة يمكنك استدعاء الدالة متى شئت بدلاً من إعادة كتابة الأكواد الطويلة!`
+                    }
+                ],
+                videos: [
+                    { title: "1. أساسيات البرمجة بلغة بايثون في ساعة واحدة", url: "https://www.youtube.com/embed/kqtD5dpn9C8" },
+                    { title: "2. الكورس الكامل لتعلم قواعد وتطبيقات Python", url: "https://www.youtube.com/embed/rfscVS0vtbw" }
+                ]
+            },
+            blender: {
+                title: "🧊 دورة التصميم ثلاثي الأبعاد ببرنامج Blender",
+                desc: "احتراف النمذجة ثلاثية الأبعاد (3D Modeling)، إضافة الخامات والإضاءة، وإخراج المشاهد الواقعية.",
+                lessons: [
+                    {
+                        title: "📌 الدرس 1: التحرك في الفضاء والاختصارات الأساسية",
+                        content: `<b>واجهة البرنامج والتحرك (Navigation):</b><br>
+                        في عالم 3D لا نتحرك كالبرامج العادية، اتبع التالي:<br>
+                        - اضغط باستمرار على <b>زر الفأرة الأوسط (العجلة)</b> للالتفاف والدوران حول المجسم.<br>
+                        - اضغط <b>Shift + العجلة</b> للتحرك يميناً ويساراً أو لأعلى وأسفل (Pan).<br><br>
+                        <b>أهم 3 اختصارات في بلندر يجب أن تحفظها (G, R, S):</b><br>
+                        - <b>حرف (G - Grab):</b> لتحريك المجسم من مكانه. (وإذا ضغطت G ثم X سيتحرك على المحور الأحمر فقط).<br>
+                        - <b>حرف (R - Rotate):</b> لتدوير المجسم.<br>
+                        - <b>حرف (S - Scale):</b> لتكبير أو تصغير المجسم ككل.<br>
+                        - لحذف أي عنصر في الشاشة، اضغط حرف (X) أو (Delete).`
+                    },
+                    {
+                        title: "📌 الدرس 2: وضع التعديل (Edit Mode) والتشكيل",
+                        content: `<b>كيف نشكل المجسمات ونغير ملامحها؟</b><br>
+                        للتعديل الفعلي على شكل المجسم (مثلاً تحويل المكعب إلى منزل)، نحدد المجسم ثم نضغط زر (Tab) في الكيبورد للانتقال من وضع الكائن إلى وضع التعديل (Edit Mode).<br><br>
+                        <b>مكونات أي مجسم ثلاثي الأبعاد:</b><br>
+                        - <b>النقاط (Vertices):</b> الزوايا التي تربط الخطوط.<br>
+                        - <b>الحواف (Edges):</b> الخطوط الواصلة بين النقاط.<br>
+                        - <b>الأوجه (Faces):</b> الأسطح المكتملة والمغلقة.<br><br>
+                        <b>أدوات التشكيل السحرية:</b><br>
+                        - <b>الانبثاق (Extrude - اختصاره E):</b> لسحب وجه وتطويله لبناء أذرع أو جدران أو أبواب.<br>
+                        - <b>تنعيم الحواف (Bevel - اختصاره Ctrl+B):</b> لجعل الحواف الحادة للمجسمات ناعمة ومنحنية وواقعية.`
+                    },
+                    {
+                        title: "📌 الدرس 3: إضافة الخامات (Materials) والإضاءة",
+                        content: `<b>الخامات (Materials):</b><br>
+                        المجسمات تظهر رمادية اللون في البداية. لإعطائها لوناً وملمساً، نذهب لقائمة الخصائص (Properties) ونضيف مادة جديدة (Principled BSDF).<br>
+                        - <b>Base Color:</b> لتحديد اللون الأساسي.<br>
+                        - <b>Metallic:</b> لرفع معدل اللمعان المعدني (مثل الذهب والحديد والكروم).<br>
+                        - <b>Roughness:</b> الخشونة، إذا قللناها للصفر يصبح المجسم كالمرآة العاكسة، وإذا رفعناها يصبح كالخشب أو البلاستيك المطفي.<br><br>
+                        <b>الإضاءة (Lighting) والرندر:</b><br>
+                        الريندر (استخراج الصورة النهائية) لا يكتمل بدون إضاءة جيدة. أنواع الإضاءة تشمل إضاءة الشمس (Sun) للمشاهد الخارجية القوية، والإضاءة النقطية (Point) للمصابيح الداخلية. للوصول لنتيجة شديدة الواقعية نستخدم محرك الرندر (Cycles).`
+                    }
+                ],
+                videos: [
+                { title: "1. شرح واجهة وأساسيات برنامج Blender 3D", url: "https://www.youtube.com/embed/O-L2d1oX3Lg" },
+                    { title: "2. تطبيق عملي لنمذجة وتصميم مجسم ثلاثي الأبعاد", url: "https://www.youtube.com/embed/TPrnSACiTJ4" }
+                ]
+            },
+            design: {
+                title: "🎨 دورة التصميم الجرافيكي والهوية البصرية",
+                desc: "تعلم القواعد الأكاديمية للتصميم الجرافيكي، اختيار الألوان المتناسقة، وتصميم الشعارات والمنشورات.",
+                lessons: [
+                    {
+                        title: "📌 الدرس 1: مبادئ وقواعد التصميم الأكاديمية",
+                        content: `<b>قواعد أساسية تجعل تصميمك احترافياً ومريحاً للعين:</b><br><br>
+                        <b>1. التباين (Contrast):</b> إبراز العناصر الهامة بوضوح عن طريق عكس الألوان. مثال: كتابة نص أبيض على خلفية كحلية ليصبح مقروءاً بوضوح ولا يتعب عين القارئ.<br>
+                        <b>2. المحاذاة (Alignment):</b> لا تضع العناصر بشكل عشوائي مشتت! يجب أن تصطف النصوص والصور على خطوط وهمية أو شبكة (Grid) لتكوين نظام بصري موحد.<br>
+                        <b>3. المساحات البيضاء (White Space):</b> ترك فراغات مناسبة حول العناصر يمنح التصميم فخامة ويساعد العين على التنفس وعدم التشتت (وليس بالضرورة أن تكون المساحة لونها أبيض فعلياً).<br>
+                        <b>4. التوازن (Balance):</b> توزيع العناصر بوزن بصري متساوٍ في اللوحة، إما توازن متماثل (كالمرآة) أو غير متماثل (عنصر كبير وثقيل يقابله عدة عناصر صغيرة).`
+                    },
+                    {
+                        title: "📌 الدرس 2: نظرية الألوان وقاعدة (60-30-10)",
+                        content: `<b>استخدام عجلة الألوان (Color Wheel):</b><br>
+                        - <b>الألوان المتكاملة (Complementary):</b> هما لونان متقابلان تماماً في العجلة (مثل البرتقالي والأزرق)، يعطيان تبايناً عالياً جداً وحيوية وطاقة للتصميم.<br>
+                        - <b>الألوان المتماثلة (Analogous):</b> 3 ألوان متجاورة في العجلة (مثل الأخضر والأصفر)، تعطي إحساساً بالانسجام والهدوء والطبيعة.<br><br>
+                        <b>القاعدة الذهبية (60-30-10) لتوزيع الألوان:</b><br>
+                        لكي لا يبدو موقعك أو تصميمك مزعجاً، وزع الألوان بهذه النسب:<br>
+                        - <b>60% للون الأساسي:</b> (غالباً يستخدم للخلفيات والمساحات الكبيرة الفارغة).<br>
+                        - <b>30% للون الثانوي:</b> (يستخدم للنصوص والعناوين والبطاقات).<br>
+                        - <b>10% للون التمييز (Accent):</b> (وهو لون لافت جداً للأنظار يستخدم بقلة للأزرار المهمة والتنبيهات لجذب الانتباه فوراً).`
+                    },
+                    {
+                        title: "📌 الدرس 3: فن اختيار الخطوط (Typography)",
+                        content: `<b>أنواع الخطوط وأسرارها:</b><br>
+                        - <b>الخطوط المذيلة (Serif):</b> هي التي تحتوي على زوائد في أطراف الحروف (مثل خط Times New Roman). توحي بالرسمية، العراقة، والكلاسيكية، وتستخدم غالباً في الكتب والصحف المطبوعة.<br>
+                        - <b>الخطوط غير المذيلة (Sans-Serif):</b> خطوط عصرية ونظيفة مستقيمة النهايات، توحي بالحداثة والتطور، وهي الأفضل والأنسب لشاشات الهواتف والمواقع (مثل Arial).<br><br>
+                        <b>التراتبية البصرية (Visual Hierarchy):</b><br>
+                        يجب أن يعرف القارئ أين ينظر أولاً من خلال حجم الخط! اجعل العنوان الرئيسي بخط عريض وكبير جداً، والعنوان الفرعي أصغر قليلاً، والنص الأساسي بخط نحيف ومقروء. <i>نصيحة:</i> لا تستخدم أكثر من خطين مختلفين في التصميم الواحد أبداً!`
+                    }
+                ],
+                videos: [
+                    { title: "1. القواعد الأساسية للتصميم الجرافيكي الناجح", url: "https://www.youtube.com/embed/YqQx75OPRa0" },
+                    { title: "2. شرح نظرية الألوان وكيفية تنسيقها في التصاميم", url: "https://www.youtube.com/embed/_2LLXnUdUIc" }
+                ]
+            },
+            ai: {
+                title: "🤖 دورة الذكاء الاصطناعي وهندسة الأوامر (AI)",
+                desc: "افهم كيف تعمل خوارزميات الذكاء الاصطناعي وتعلم الآلة، وكيف تكتب أوامر احترافية تساعدك في دراستك بقوة.",
+                lessons: [
+                    {
+                        title: "📌 الدرس 1: مفاهيم الذكاء الاصطناعي الأساسية",
+                        content: `<b>ما هو الذكاء الاصطناعي (AI) إجمالاً؟</b><br>
+                        هو قدرة الآلات والبرمجيات على محاكاة القدرات الذهنية للبشر (مثل التعلم، الاستنتاج، الفهم اللغوي، وحتى الإبداع).<br><br>
+                        <b>تعلم الآلة (Machine Learning):</b><br>
+                        في البرمجة التقليدية، نعطي الكمبيوتر أوامر ثابتة ليفعلها. أما في "تعلم الآلة"، فنحن نقوم بتغذية الكمبيوتر بكميات هائلة من البيانات، وتُترك الآلة لتستنتج القواعد والأنماط بنفسها (مثال: تدريب خوارزمية على 10 آلاف صورة لسيارة، حتى تتمكن من التعرف عليها تلقائياً في أي صورة جديدة).<br><br>
+                        <b>التعلم العميق (Deep Learning):</b><br>
+                        هي شبكات عصبية معقدة تحاكي تماماً طريقة عمل العقل البشري وخلاياه، وهي التقنية العبقرية التي بنيت عليها النماذج اللغوية الضخمة اليوم مثل ChatGPT و Gemini.`
+                    },
+                    {
+                        title: "📌 الدرس 2: أسرار هندسة الأوامر (Prompt Engineering)",
+                        content: `<b>كيف تحصل على إجابة عبقرية من الذكاء الاصطناعي؟</b><br>
+                        سر الذكاء الاصطناعي يكمن في طريقة سؤالك! يجب أن تصيغ أمرك (Prompt) بدقة ليحتوي على 4 عناصر رئيسية:<br><br>
+                        <b>1. الدور (Role):</b> اطلب من الذكاء تقمص شخصية خبير. (مثال: "تخيل أنك معلم فيزياء حائز على جائزة نوبل...").<br>
+                        <b>2. المهمة (Task):</b> حدد ما تريده بالضبط. (مثال: "...قم بشرح قانون نيوتن الثالث وقوى الفعل ورد الفعل...").<br>
+                        <b>3. السياق (Context):</b> لمن يوجه هذا الكلام؟ (مثال: "...موجه لشخص في الصف العاشر وبطريقة مبسطة جداً...").<br>
+                        <b>4. التنسيق (Format):</b> كيف تريد شكل الإجابة؟ (مثال: "...على شكل 3 نقاط قصيرة مع ذكر مثالين من الحياة اليومية").<br>
+                        <i>كلما التزمت بهذه العناصر الـ 4، أذهلتك جودة المخرجات!</i>`
+                    },
+                    {
+                        title: "📌 الدرس 3: توظيف الذكاء الاصطناعي للطلاب",
+                        content: `<b>كيف تستفيد من الـ AI كطالب في أُفُق الفاروق؟</b><br>
+                        - <b>تلخيص الملفات والمقالات:</b> يمكنك إعطاؤه نصاً طويلاً ومملاً من كتاب التاريخ وطلب استخراج أهم 5 تواريخ وأسماء شخصيات فقط في جدول مرتب.<br>
+                        - <b>استخدام طريقة فاينمان للتعلم:</b> اطلب منه "اشرح لي مفهوم الانقسام الخلوي في الأحياء كأني طفل عمري 10 سنوات" ليقرب لك الفكرة المعقدة.<br>
+                        - <b>توليد الاختبارات التجريبية:</b> أعطه معلومات درس معين واطلب منه: "اكتب لي 10 أسئلة خيارات متعددة مع الإجابات في النهاية لاختبار فهمي".<br><br>
+                        <b>⚠️ تحذير خطير - الهلوسة (Hallucination):</b> الذكاء الاصطناعي قد يخترع معلومات غير صحيحة أحياناً ويبدو واثقاً جداً منها! لذلك استخدمه للفهم، ولا تعتمد عليه كمصدر موثوق للحقائق العلمية والأرقام دون مراجعتها.`
+                    }
+                ],
+                videos: [
+                    { title: "1. ما هو الذكاء الاصطناعي وكيف يعمل؟", url: "https://www.youtube.com/embed/2ePf9rue1Ao" },
+                    { title: "2. احتراف هندسة الأوامر (Prompt Engineering)", url: "https://www.youtube.com/embed/jC4v5AS4RIM" }
+                ]
+            },
+            web: {
+                title: "🌐 دورة تصميم وتطوير المواقع الإلكترونية",
+                desc: "تعلم بناء وتصميم المواقع التفاعلية خطوة بخطوة باستخدام HTML5 و CSS3 و JavaScript تماماً كما بنينا منصة أُفُق الفاروق.",
+                lessons: [
+                    {
+                        title: "📌 الدرس 1: هيكلة الويب بلغة HTML5",
+                        content: `<b>لغة HTML (الهيكل العظمي للموقع):</b><br>
+                        هي لغة التوصيف التي تخبر المتصفح بنوع المحتوى الموجود في الصفحة (هنا صورة، وهنا عنوان، وهنا فقرة). تعتمد على "الوسوم" (Tags) التي تفتح وتغلق.<br><br>
+                        <b>أهم الوسوم التي يجب أن تعرفها:</b><br>
+                        - <code>&lt;h1&gt; إلى &lt;h6&gt;</code>: تستخدم لكتابة العناوين متدرجة الحجم.<br>
+                        - <code>&lt;p&gt;</code>: لكتابة الفقرات والنصوص العادية.<br>
+                        - <code>&lt;a href="link"&gt;</code>: لإنشاء رابط تشعبي (زر ينقلك لصفحة أخرى).<br>
+                        - <code>&lt;img src="image.jpg"&gt;</code>: لإدراج وعرض صورة في الموقع.<br>
+                        - <code>&lt;div&gt;</code>: عبارة عن صندوق أو حاوية فارغة نجمع بداخلها عدة عناصر لنقوم بتنسيقها معاً لاحقاً ككتلة واحدة.`
+                    },
+                    {
+                        title: "📌 الدرس 2: التنسيق والجماليات بلغة CSS3",
+                        content: `<b>لغة CSS (الملابس والمكياج والديكور):</b><br>
+                        تستخدم لتلوين وتنسيق وترتيب العناصر التي كتبناها بالـ HTML. بدونها ستكون كل المواقع عبارة عن نصوص سوداء وخلفية بيضاء.<br><br>
+                        <b>كيف نستخدمها؟</b><br>
+                        نستهدف العنصر المطلوب ونعطيه خصائص بين قوسين معكوفين:<br>
+                        <code>color: red;</code> (لتغيير لون النص نفسه).<br>
+                        <code>background-color: black;</code> (لتغيير لون خلفية العنصر).<br>
+                        <code>border-radius: 10px;</code> (لجعل زوايا الصندوق أو الزر دائرية وناعمة).<br><br>
+                        <b>نموذج الصندوق (Box Model) الهام جداً:</b><br>
+                        1. <b>Margin (الهامش الخارجي):</b> المسافة الخارجية التي تبعد الصندوق عن الصناديق الأخرى.<br>
+                        2. <b>Padding (الحشوة الداخلية):</b> المسافة الداخلية بين حدود الصندوق والنص المكتوب بداخله.`
+                    },
+                    {
+                        title: "📌 الدرس 3: التفاعل والبرمجة بلغة JavaScript",
+                        content: `<b>لغة JavaScript (العضلات والروح الحركية):</b><br>
+                        هي لغة البرمجة التي تجعل الموقع "حياً" وتفاعلياً مع المستخدم. بدونها سيكون الموقع مجرد صور ونصوص ثابتة للقراءة فقط.<br><br>
+                        <b>ماذا يمكننا أن نفعل بها؟</b><br>
+                        - <b>الاستجابة لضغطات المستخدم:</b> عبر حدث <code>onclick</code>، فمثلاً عندما تضغط زر يتم إخفاء قسم وإظهار قسم آخر (كما هو الحال في موقعنا!).<br>
+                        - <b>التحكم في عناصر الـ HTML:</b> عبر الأمر الشهير <code>document.getElementById('ID_Name')</code> يمكننا تغيير النصوص والصور برمجياً.<br>
+                        - <b>التخزين المحلي (LocalStorage):</b> حفظ البيانات في متصفح المستخدم لتبقى موجودة حتى لو أغلق الموقع ورجع له غداً (استخدمناها لحفظ اسم الطالب ولون الثيم في المنصة).`
+                    }
+                ],
+                videos: [
+                    { title: "1. أساسيات بناء صفحات الويب بلغة HTML", url: "https://www.youtube.com/embed/qz0aGYrrlhU" },
+                    { title: "2. تنسيق وتصميم واجهات المواقع بلغة CSS", url: "https://www.youtube.com/embed/1Rs2ND1ryYc" }
+                ]
+            }
+        };
+
+        // دالة فتح الدورة وتحويل الدروس إلى أزرار تفاعلية
+        window.openTechCourse = function(key) {
+            const c = techCoursesCatalog[key];
+            if (!c) return;
+            document.getElementById('skills-courses-grid').classList.add('hidden');
+            document.getElementById('single-course-view').classList.remove('hidden');
+            document.getElementById('sc-title').innerText = c.title;
+            document.getElementById('sc-desc').innerText = c.desc;
+            
+            // توليد أزرار الدروس التي تفتح الشاشة التفصيلية عند النقر عليها
+            document.getElementById('sc-lessons').innerHTML = c.lessons.map((l, index) => `
+                <button onclick="openLessonDetail('${key}', ${index})" class="skill-card" style="width:100%; text-align:right; cursor:pointer; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(245,245,245,0.9)); border: 1px solid rgba(0,0,0,0.08); border-right: 6px solid var(--c); transition: transform 0.2s, box-shadow 0.2s; margin:0; padding:18px 20px; display:flex; justify-content:space-between; align-items:center; border-radius: 12px; font-family: inherit;">
+                    <span style="font-weight:bold; color:#222; font-size:1.1rem;">${l.title}</span>
+                    <span style="font-size:1.3rem; color:var(--c);">👈 تعلم الآن</span>
+                </button>
+            `).join('');
+            
+            // توليد الفيديوهات
+            document.getElementById('sc-videos').innerHTML = c.videos.map(v => `
+                <div class="skill-card" style="padding:0; overflow:hidden; margin:0; position:relative; z-index:10; border-radius:12px;">
+                    <div style="padding:12px 15px; background:rgba(0,0,0,0.02);"><h4>${v.title}</h4></div>
+                    <iframe width="100%" height="220" src="${v.url}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="pointer-events: auto; position:relative; z-index:20;"></iframe>
+                </div>
+            `).join('');
+        };
+
+        // دالة فتح الشرح التفصيلي للدرس المحدد
+        window.openLessonDetail = function(courseKey, lessonIndex) {
+            const course = techCoursesCatalog[courseKey];
+            const lesson = course.lessons[lessonIndex];
+            
+            // إخفاء واجهة الدورة وإظهار واجهة تفاصيل الدرس
+            document.getElementById('single-course-view').classList.add('hidden');
+            document.getElementById('lesson-detail-view').classList.remove('hidden');
+            
+            // تعبئة البيانات
+            document.getElementById('ld-title').innerText = lesson.title;
+            document.getElementById('ld-content').innerHTML = lesson.content;
+            
+            // التمرير لأعلى الصفحة لتسهيل القراءة
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // دالة الرجوع من الشرح التفصيلي إلى قائمة دروس الدورة
+        window.closeLessonDetail = function() {
+            document.getElementById('lesson-detail-view').classList.add('hidden');
+            document.getElementById('single-course-view').classList.remove('hidden');
+        };
+
+        // دالة الرجوع من الدورة إلى القائمة الرئيسية للدورات
+        window.closeTechCourse = function() {
+            document.getElementById('sc-videos').innerHTML = '';
+            document.getElementById('single-course-view').classList.add('hidden');
+            document.getElementById('skills-courses-grid').classList.remove('hidden');
+        };
+
+// دالة فتح الدورة وتحويل الدروس إلى أزرار تفاعلية
+window.openTechCourse = function(key) {
+            const c = techCoursesCatalog[key];
+            if (!c) return;
+            document.getElementById('skills-courses-grid').classList.add('hidden');
+            document.getElementById('single-course-view').classList.remove('hidden');
+            document.getElementById('sc-title').innerText = c.title;
+            document.getElementById('sc-desc').innerText = c.desc;
+            
+            // توليد أزرار الدروس التي تفتح الشاشة التفصيلية عند النقر عليها
+            document.getElementById('sc-lessons').innerHTML = c.lessons.map((l, index) => `
+                <button onclick="openLessonDetail('${key}', ${index})" class="skill-card" style="width:100%; text-align:right; cursor:pointer; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(245,245,245,0.9)); border: 1px solid rgba(0,0,0,0.08); border-right: 6px solid var(--c); transition: transform 0.2s, box-shadow 0.2s; margin:0; padding:18px 20px; display:flex; justify-content:space-between; align-items:center; border-radius: 12px; font-family: inherit;">
+                    <span style="font-weight:bold; color:#222; font-size:1.1rem;">${l.title}</span>
+                    <span style="font-size:1.3rem; color:var(--c);">👈 تعلم الآن</span>
+                </button>
+            `).join('');
+            
+            // توليد الفيديوهات
+            document.getElementById('sc-videos').innerHTML = c.videos.map(v => `
+                <div class="skill-card" style="padding:0; overflow:hidden; margin:0; position:relative; z-index:10; border-radius:12px;">
+                    <div style="padding:12px 15px; background:rgba(0,0,0,0.02);"><h4>${v.title}</h4></div>
+                    <iframe width="100%" height="220" src="${v.url}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="pointer-events: auto; position:relative; z-index:20;"></iframe>
+                </div>
+            `).join('');
+        };
+
+        // دالة فتح الشرح التفصيلي للدرس المحدد
+        window.openLessonDetail = function(courseKey, lessonIndex) {
+            const course = techCoursesCatalog[courseKey];
+            const lesson = course.lessons[lessonIndex];
+            
+            // إخفاء واجهة الدورة وإظهار واجهة تفاصيل الدرس
+            document.getElementById('single-course-view').classList.add('hidden');
+            document.getElementById('lesson-detail-view').classList.remove('hidden');
+            
+            // تعبئة البيانات
+            document.getElementById('ld-title').innerText = lesson.title;
+            document.getElementById('ld-content').innerHTML = lesson.content;
+            
+            // التمرير لأعلى الصفحة لتسهيل القراءة
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // دالة الرجوع من الشرح التفصيلي إلى قائمة دروس الدورة
+        window.closeLessonDetail = function() {
+            document.getElementById('lesson-detail-view').classList.add('hidden');
+            document.getElementById('single-course-view').classList.remove('hidden');
+        };
+
+        // دالة الرجوع من الدورة إلى القائمة الرئيسية للدورات
+        window.closeTechCourse = function() {
+            document.getElementById('sc-videos').innerHTML = '';
+            document.getElementById('single-course-view').classList.add('hidden');
+            document.getElementById('skills-courses-grid').classList.remove('hidden');
+        };
+        function initBot() {
+            const botBtn = document.getElementById('bot');
+            const botPanel = document.getElementById('bp');
+            const msgBox = document.getElementById('bm');
+            const inputField = document.getElementById('bi');
+            const sendButton = document.getElementById('bs');
+
+            if (!botBtn || !botPanel) return;
+
+            const addMsg = (text, sender) => {
+                const m = document.createElement('div');
+                m.className = 'm ' + sender;
+                m.innerHTML = text;
+                m.style.padding = '12px 18px';
+                m.style.borderRadius = '15px';
+                m.style.maxWidth = '85%';
+                m.style.lineHeight = '1.7';
+                m.style.alignSelf = sender === 'u' ? 'flex-end' : 'flex-start';
+                m.style.borderBottomLeftRadius = sender === 'u' ? '2px' : '15px';
+                m.style.borderBottomRightRadius = sender === 'b' ? '2px' : '15px';
+                if (sender === 'u') {
+                    m.style.background = 'var(--c)';
+                    m.style.color = '#fff';
+                } else {
+                    m.style.background = 'rgba(17,74,49,0.1)';
+                    m.style.color = '#1a2f3a';
+                }
+                msgBox.appendChild(m);
+                msgBox.scrollTop = msgBox.scrollHeight;
+                return m;
+            };
+
+            const send = () => {
+                const q = inputField.value.trim();
+                if (!q) return customAlert('الرجاء كتابة سؤالك أولاً!');
+                addMsg(esc(q), 'u');
+                inputField.value = '';
+                const waiting = addMsg('جاري التفكير... ⏳', 'b');
+
+                setTimeout(() => {
+                    const s = q.toLowerCase();
+                    let reply = 'سؤال ممتاز يا بطل! يمكنك مراجعة هذا الدرس في قسم <b>الملخصات الدراسية 📚</b> أو مشاهدة شروحاته في <b>المقاطع التعليمية</b>.';
+                    if (s.includes('سلام') || s.includes('هلا') || s.includes('مرحبا')) {
+                        reply = `يا هلا بك ${window.studentData.name || 'يا بطل'} في أُفُق الفاروق! كيف أساعدك في مذاكرتك اليوم؟ 🌟`;
+                    } else if (s.includes('انجليزي') || s.includes('قواعد') || s.includes('grammar')) {
+                        reply = 'تجد شرحاً مفصلاً لجميع قواعد اللغة الإنجليزية من الصف 7 إلى 12 مع الأمثلة داخل قسم <b>تعلم الإنجليزية 🔤</b>.';
+                    } else if (s.includes('دورة') || s.includes('سيبراني') || s.includes('بايثون') || s.includes('بلندر') || s.includes('تصميم')) {
+                        reply = 'الدورات التقنية (الأمن السيبراني، بايثون، بلندر، الذكاء الاصطناعي، وتصميم المواقع) متوفرة مع الفيديوهات في قسم <b>تطوير المهارات 💡</b>.';
+                    } else if (s.includes('معدل') || s.includes('درجات')) {
+                        reply = 'لحساب معدلك بدقة ادخل إلى قسم <b>الخدمات الأكاديمية ⚙️</b>، ولتسجيل درجات اختباراتك ادخل قسم <b>التنظيم والمتابعة 📅</b>.';
+                    } else if (s.includes('من نحن') || s.includes('شركة') || s.includes('مطور')) {
+                        reply = 'منصة أُفُق الفاروق هي شركة طلابية من <b>مدرسة الفاروق للتعليم الأساسي</b>، بتطوير الطالب <b>Ali Mohammed Al-Rahma</b>.';
+                    }
+                    waiting.innerHTML = reply;
+                    msgBox.scrollTop = msgBox.scrollHeight;
+                }, 500);
+            };
+
+            botBtn.onclick = () => botPanel.classList.toggle('on');
+            sendButton.onclick = send;
+            inputField.onkeydown = e => { if (e.key === 'Enter') send(); };
+        }
+    </script>
+</body>
+</html>
