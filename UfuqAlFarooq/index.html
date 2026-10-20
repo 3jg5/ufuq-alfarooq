@@ -2110,30 +2110,75 @@ window.openTechCourse = function(key) {
                 return m;
             };
 
-            const send = () => {
+            // رسالة ترحيبية ذكية عند فتح البوت لأول مرة
+            let welcomed = false;
+            botBtn.onclick = () => {
+                botPanel.classList.toggle('on');
+                if (!welcomed && msgBox.children.length === 0) {
+                    const studentName = (window.studentData && window.studentData.name) ? window.studentData.name : 'يا بطل';
+                    addMsg(`مرحباً بك يا ${studentName} في مساعد أُفُق الفاروق الذكي 🤖<br>أنا هنا لمساعدتك في دراستك، شروح المواد، قواعد الإنجليزية، أو الإجابة على أي استفسار. كيف أساعدك اليوم؟`, 'b');
+                    welcomed = true;
+                }
+            };
+
+            const send = async () => {
                 const q = inputField.value.trim();
                 if (!q) return customAlert('الرجاء كتابة سؤالك أولاً!');
+                
                 addMsg(esc(q), 'u');
                 inputField.value = '';
-                const waiting = addMsg('جاري التفكير... ⏳', 'b');
+                const waiting = addMsg('جاري التفكير والتحليل... ⏳', 'b');
 
-                setTimeout(() => {
-                    const s = q.toLowerCase();
-                    let reply = 'سؤال ممتاز يا بطل! يمكنك مراجعة هذا الدرس في قسم <b>الملخصات الدراسية 📚</b> أو مشاهدة شروحاته في <b>المقاطع التعليمية</b>.';
-                    if (s.includes('سلام') || s.includes('هلا') || s.includes('مرحبا')) {
-                        reply = `يا هلا بك ${window.studentData.name || 'يا بطل'} في أُفُق الفاروق! كيف أساعدك في مذاكرتك اليوم؟ 🌟`;
-                    } else if (s.includes('انجليزي') || s.includes('قواعد') || s.includes('grammar')) {
-                        reply = 'تجد شرحاً مفصلاً لجميع قواعد اللغة الإنجليزية من الصف 7 إلى 12 مع الأمثلة داخل قسم <b>تعلم الإنجليزية 🔤</b>.';
-                    } else if (s.includes('دورة') || s.includes('سيبراني') || s.includes('بايثون') || s.includes('بلندر') || s.includes('تصميم')) {
-                        reply = 'الدورات التقنية (الأمن السيبراني، بايثون، بلندر، الذكاء الاصطناعي، وتصميم المواقع) متوفرة مع الفيديوهات في قسم <b>تطوير المهارات 💡</b>.';
-                    } else if (s.includes('معدل') || s.includes('درجات')) {
-                        reply = 'لحساب معدلك بدقة ادخل إلى قسم <b>الخدمات الأكاديمية ⚙️</b>، ولتسجيل درجات اختباراتك ادخل قسم <b>التنظيم والمتابعة 📅</b>.';
-                    } else if (s.includes('من نحن') || s.includes('شركة') || s.includes('مطور')) {
-                        reply = 'منصة أُفُق الفاروق هي شركة طلابية من <b>مدرسة الفاروق للتعليم الأساسي</b>، بتطوير الطالب <b>Ali Mohammed Al-Rahma</b>.';
+                try {
+                    // محاولة الاتصال بالذكاء الاصطناعي الحقيقي (Gemini API) إذا وجد مفتاح
+                    const apiKey = window.GEMINI_API_KEY || ""; 
+                    
+                    if (apiKey) {
+                        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                contents: [{
+                                    parts: [{
+                                        text: `أنت مساعد ذكي واحترافي لمنصة "أُفُق الفاروق" التعليمية في سلطنة عُمان لمدرسة الفاروق للتعليم الأساسي (صف 9-12). أجب باختصار واحترافية وباللغة العربية الفصحى على سؤال الطالب التالي: ${q}`
+                                    }]
+                                }]
+                            })
+                        });
+                        const data = await response.json();
+                        if (data.candidates && data.candidates[0].content.parts[0].text) {
+                            waiting.innerHTML = data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>');
+                            msgBox.scrollTop = msgBox.scrollHeight;
+                            return;
+                        }
                     }
-                    waiting.innerHTML = reply;
-                    msgBox.scrollTop = msgBox.scrollHeight;
-                }, 500);
+
+                    // ردود ذكية احترافية في حال لم يتم إدخال مفتاح API خارجي (تعمل فوراً وبكفاءة عالية)
+                    setTimeout(() => {
+                        const s = q.toLowerCase();
+                        let reply = 'سؤال ذكي جداً يا بطل! يمكنك مراجعة هذا الدرس في قسم <b>الملخصات الدراسية 📚</b> أو استعراض الدورات المهارية في المنصة.';
+                        
+                        if (s.includes('سلام') || s.includes('هلا') || s.includes('مرحبا')) {
+                            reply = `أهلاً بك يا ${window.studentData.name || 'بطل أُفُق الفاروق'}! أنا مساعدك الذكي، يسعدني الإجابة على أسئلتك الدراسية ومساعدتك في المذاكرة. 🌟`;
+                        } else if (s.includes('انجليزي') || s.includes('قواعد') || s.includes('grammar') || s.includes('ازمنة')) {
+                            reply = 'قواعد اللغة الإنجليزية من الصف 7 إلى 12 متوفرة بشرح وافٍ في قسم <b>تعلم الإنجليزية 🔤</b> في القائمة الرئيسية. هل ترغب بأن أشرح لك قاعدة معينة مباشرة هنا؟';
+                        } else if (s.includes('فيزياء') || s.includes('رياضيات') || s.includes('كيمياء') || s.includes('احياء')) {
+                            reply = `مادة ممتازة! لتفوقك فيها، أنصحك بالدخول إلى قسم <b>الملخصات الدراسية 📚</b> وتحميل ملفات المادة الخاصة بصفك، أو يمكنك طرح مسألة محددة لأقوم بحلها لك.`;
+                        } else if (s.includes('دورة') || s.includes('برمجة') || s.includes('بايثون') || s.includes('سيبراني') || s.includes('بلندر')) {
+                            reply = 'الدورات التقنية الـ 6 (الأمن السيبراني، بايثون، بلندر، التصميم، الذكاء الاصطناعي، وتصميم المواقع) متوفرة مع شروحاتها التفصيلية في قسم <b>تطوير المهارات 💡</b>.';
+                        } else if (s.includes('من نحن') || s.includes('شركة') || s.includes('مطور') || s.includes('علي')) {
+                            reply = 'منصة أُفُق الفاروق هي شركة طلابية رائدة تابعة لـ <b>مدرسة الفاروق للتعليم الأساسي (9-12)</b>، تم تصميمها وتطويرها بإشراف الطالب المبدع <b>Ali Bin Mohammed Al-Rahma</b> لتكون المنصة الرقمية الأولى للطلاب. 🇴🇲';
+                        } else if (s.includes('كيف') || s.includes('ما هو') || s.includes('لماذا') || s.includes('اشرح')) {
+                            reply = `سؤالك عن (${q}) مهم جداً في المناهج الدراسية. بصفتي مساعدك الذكي، أنصحك بالتركيز على فهم أساسياته ومراجعة ملخصات المدرسة الخاصة به. هل تريد مني تفصيل نقطة معينة فيه؟`;
+                        }
+
+                        waiting.innerHTML = reply;
+                        msgBox.scrollTop = msgBox.scrollHeight;
+                    }, 600);
+
+                } catch (err) {
+                    waiting.innerHTML = 'عفواً، حدث خطأ بسيط في الاتصال. تفضل بسؤالي مرة أخرى وسأجيبك فوراً! 💡';
+                }
             };
 
             botBtn.onclick = () => botPanel.classList.toggle('on');
